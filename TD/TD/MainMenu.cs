@@ -16,10 +16,6 @@ namespace TD
     {
         public GameState gameState { get; set; }
         List<Buttons> buttons;
-        float playTransparency = 1.0f;
-        float optsTransparency = 1.0f;
-        float quitTransparency = 1.0f;
-
         public MainMenu(List<Texture2D> textures)
         {
             gameState = GameState.MainMenu;
