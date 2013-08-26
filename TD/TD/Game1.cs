@@ -26,7 +26,7 @@ namespace TD
         KeyboardHandler keyboard;
         GameState gameState;
         MainMenu menu;
-        Texture2D towerText;
+        Texture2D[] towersText;
         List<Tower> towerList;
 
         public Game1()
@@ -64,6 +64,9 @@ namespace TD
             menuButtons.Add(Content.Load<Texture2D>("PlayButton"));
             menuButtons.Add(Content.Load<Texture2D>("OptsButton"));
 
+            towersText = new Texture2D[10];
+            towersText[0] = Content.Load<Texture2D>("Tower");
+
             menu = new MainMenu(menuButtons);
         }
 
@@ -93,7 +96,18 @@ namespace TD
             {
                 if (mouse.LeftClickState == ClickState.Clicked)
                 {
+                    Tower tower = new Tower(mouse.position, Tower.Types.type1, towersText[0]);
 
+                    if (!towerList.Any())
+                    {
+                        towerList.Add(tower);
+                        return;
+                    }
+                    for (int i = 0; i < towerList.Count; i++)
+                    {
+                        if (!towerList[i].BoundingBox.Contains(mouse.position) && towerList.Any())
+                            towerList.Add(tower);
+                    }
                 }
             }
 
@@ -114,6 +128,7 @@ namespace TD
                     menu.Draw(spriteBatch);
                     break;
                 case GameState.InGame:
+                    PrintTowers();
                     break;
                 case GameState.Options:
                     //Draw options

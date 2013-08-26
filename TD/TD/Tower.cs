@@ -18,22 +18,20 @@ namespace TD
         public enum Types { type1, swag }
         Texture2D text;
         Rectangle boundingBox;
+
+        /*
         public static List<Texture2D> towerTextures;
 
-        public void LoadTowerTextures()
+        public void LoadTowerTextures(Texture2D[] texture)
         {
+            for (int i = 0; i < texture.Length; i++)
+                towerTextures.Add(texture[i]);
+        } */
 
-        }
-
-        public Tower(Types type)
+        public Tower(Point pos, Types type, Texture2D texture)
         {
-            text = towerTextures[(int)type];
-            boundingBox = new Rectangle(0, 0, 50, 50);
-        }
-
-        public void Add(MouseHandler souris)
-        {
-
+            text = texture;
+            boundingBox = new Rectangle(pos.X, pos.Y, 50, 50);
         }
 
         public void Draw(SpriteBatch sprite)

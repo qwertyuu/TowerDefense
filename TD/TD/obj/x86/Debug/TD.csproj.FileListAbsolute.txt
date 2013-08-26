@@ -26,3 +26,14 @@ C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\obj\x86\D
 C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\OptsButton.xnb
 C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\obj\x86\Debug\TD.csprojResolveAssemblyReference.cache
 C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\Tower.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\4g-speed.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\PlayButton.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\OptsButton.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\Tower.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\PlayButton.png
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\TD.exe
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\TD.pdb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.csprojResolveAssemblyReference.cache
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.exe
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.pdb
