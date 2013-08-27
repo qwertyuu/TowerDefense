@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 
 namespace TD
 {
-    enum GameState { MainMenu, Options, InGame, Quit }
+    enum GameState { MainMenu, Options, InGame, Quit, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu}
     enum ClickState { Clicked, Held, Releasing, Released }
 
     /// <summary>
