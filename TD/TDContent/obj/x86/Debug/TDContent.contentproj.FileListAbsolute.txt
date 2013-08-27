@@ -1,3 +1,2 @@
 C:\Users\Paul\documents\visual studio 2012\Projects\TD\TD\TDContent\obj\x86\Debug\TDContent.contentprojResolveAssemblyReference.cache
 C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TDContent\obj\x86\Debug\TDContent.contentprojResolveAssemblyReference.cache
-C:\Users\Utilisateur\Desktop\TowerDefense\TD\TDContent\obj\x86\Debug\TDContent.contentprojResolveAssemblyReference.cache

@@ -33,7 +33,9 @@ C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\Tower.xnb
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\PlayButton.png
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\TD.exe
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\TD.pdb
-C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.csprojResolveAssemblyReference.cache
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.exe
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.pdb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\SpriteFont1.xnb
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\1.txt
+C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\Cell.xnb
