@@ -104,7 +104,7 @@ namespace TD
             if (IsActive)
             {
                 keyboard.Update();
-                mouse.Update(cam);
+                mouse.Update(cam, gameState);
                 switch (gameState)
                 {
                     case GameState.MainMenu:

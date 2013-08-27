@@ -47,27 +47,30 @@ namespace TD
         public Point fakePos;
         private ClickState _right;
         public Point position { get; set; }
-        public void Update(Camera cam)
+        public void Update(Camera cam, GameState state)
         {
             MouseState currentMouseState = Mouse.GetState();
-            if (currentMouseState.X >= GraphicsDeviceManager.DefaultBackBufferWidth)
+            if (state == GameState.InGame)
             {
-                Mouse.SetPosition(GraphicsDeviceManager.DefaultBackBufferWidth, currentMouseState.Y);
-            }
-            else if (currentMouseState.X <= 0)
-            {
-                Mouse.SetPosition(0, currentMouseState.Y);
-            }
-            else if (currentMouseState.Y >= GraphicsDeviceManager.DefaultBackBufferHeight)
-            {
-                Mouse.SetPosition(currentMouseState.X, GraphicsDeviceManager.DefaultBackBufferHeight);
-            }
-            else if (currentMouseState.Y <= 0)
-            {
-                Mouse.SetPosition(currentMouseState.X, 0);
+                if (currentMouseState.X >= GraphicsDeviceManager.DefaultBackBufferWidth)
+                {
+                    Mouse.SetPosition(GraphicsDeviceManager.DefaultBackBufferWidth, currentMouseState.Y);
+                }
+                else if (currentMouseState.X <= 0)
+                {
+                    Mouse.SetPosition(0, currentMouseState.Y);
+                }
+                else if (currentMouseState.Y >= GraphicsDeviceManager.DefaultBackBufferHeight)
+                {
+                    Mouse.SetPosition(currentMouseState.X, GraphicsDeviceManager.DefaultBackBufferHeight);
+                }
+                else if (currentMouseState.Y <= 0)
+                {
+                    Mouse.SetPosition(currentMouseState.X, 0);
+                }
+                fakePos = new Point((int)cam.position.X + currentMouseState.X, (int)cam.position.Y + currentMouseState.Y);
             }
             position = new Point(currentMouseState.X, currentMouseState.Y);
-            fakePos = new Point((int)cam.position.X + currentMouseState.X, (int)cam.position.Y + currentMouseState.Y);
             if (currentMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (oldMouseState.LeftButton == ButtonState.Released)
