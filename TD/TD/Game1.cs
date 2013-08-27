@@ -163,7 +163,7 @@ namespace TD
                     break;
                 case GameState.InGame:
                     spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
-                    ui.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                    ui.Begin();
                     foreach (var item in map)
                     {
                         Color a = Color.White;

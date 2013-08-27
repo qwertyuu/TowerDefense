@@ -13,24 +13,22 @@ namespace TD
         public Vector2 position = Vector2.Zero;
         public int mapWidth;
         public int mapHeight;
-        const int treshold = 20; //Left and top side of the screen
-        const int treshold2 = 170; //Right side of the screen
-        const int treshold3 = 120; // Bottom side
+        const int treshold = 20;
         int speed = 1000;
-        int maxX = GraphicsDeviceManager.DefaultBackBufferWidth - treshold2;
+        int maxX = GraphicsDeviceManager.DefaultBackBufferWidth - treshold;
         int minX = treshold;
-        int maxY = GraphicsDeviceManager.DefaultBackBufferHeight - treshold3;
+        int maxY = GraphicsDeviceManager.DefaultBackBufferHeight - treshold;
         int minY = treshold;
 
         public void Update(MouseHandler mouse, GameTime gametime)
         {
-            if (mouse.position.X > maxX && mouse.position.X < maxX + 20)
+            if (mouse.position.X > maxX)
                 position.X += (float)(speed * gametime.ElapsedGameTime.TotalSeconds);
 
             else if (mouse.position.X < minX)
                 position.X -= (float)(speed * gametime.ElapsedGameTime.TotalSeconds);
 
-            if (mouse.position.Y > maxY && mouse.position.Y < maxY + 20)
+            if (mouse.position.Y > maxY)
                 position.Y += (float)(speed * gametime.ElapsedGameTime.TotalSeconds);
 
             else if (mouse.position.Y < minY)

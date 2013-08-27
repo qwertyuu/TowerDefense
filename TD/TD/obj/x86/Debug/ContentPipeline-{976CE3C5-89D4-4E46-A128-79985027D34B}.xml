@@ -7,8 +7,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\4g-speed.xnb</Output>
-      <Time>2013-08-25T18:42:03.7978851-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\4g-speed.xnb</Output>
+      <Time>2013-08-26T20:52:12.5277901-04:00</Time>
     </Item>
     <Item>
       <Source>PlayButton.png</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\PlayButton.xnb</Output>
-      <Time>2013-08-25T18:42:03.8128859-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\PlayButton.xnb</Output>
+      <Time>2013-08-26T20:52:12.5297902-04:00</Time>
     </Item>
     <Item>
       <Source>OptsButton.png</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\OptsButton.xnb</Output>
-      <Time>2013-08-25T18:42:03.8088857-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\OptsButton.xnb</Output>
+      <Time>2013-08-26T20:52:12.5287901-04:00</Time>
     </Item>
     <Item>
       <Source>Tower.png</Source>
@@ -34,8 +34,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\Tower.xnb</Output>
-      <Time>2013-08-25T18:42:03.8188863-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\Tower.xnb</Output>
+      <Time>2013-08-26T20:52:12.5307903-04:00</Time>
     </Item>
     <Item>
       <Source>Cell.png</Source>
@@ -43,17 +43,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\Cell.xnb</Output>
-      <Time>2013-08-26T19:27:05.0709333-04:00</Time>
-    </Item>
-    <Item>
-      <Source>SpriteFont1.spritefont</Source>
-      <Name>SpriteFont1</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
-      <Time>2013-08-26T20:14:05.7422665-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\Cell.xnb</Output>
+      <Time>2013-08-26T20:52:12.5287901-04:00</Time>
     </Item>
     <Item>
       <Source>planUI.png</Source>
@@ -61,8 +52,17 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\planUI.xnb</Output>
-      <Time>2013-08-27T14:55:23.5613548-04:00</Time>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\planUI.xnb</Output>
+      <Time>2013-08-27T17:15:17.1676167-04:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont1.spritefont</Source>
+      <Name>SpriteFont1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\SpriteFont1.xnb</Output>
+      <Time>2013-08-26T20:52:12.5297902-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -71,10 +71,10 @@
       <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TDContent\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TDContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
@@ -102,8 +102,8 @@
         <Value>2011-09-01T16:22:30-04:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2013-08-09T19:11:06.9803279-04:00</Value>
+        <Key>C:\windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2013-08-06T02:45:48.8909374-04:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

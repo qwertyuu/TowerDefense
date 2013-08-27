@@ -43,3 +43,5 @@ C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\D
 C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\SpriteFont1.xnb
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\obj\x86\Debug\TD.csprojResolveAssemblyReference.cache
 C:\Users\Utilisateur\Desktop\TowerDefense\TD\TD\bin\x86\Debug\Content\planUI.xnb
+C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\bin\x86\Debug\Content\planUI.xnb
+C:\Users\Paul\Documents\Visual Studio 2012\Projects\VSAnywhereTD\TD\TD\obj\x86\Debug\TD.csprojResolveAssemblyReference.cache
