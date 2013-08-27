@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -16,6 +16,7 @@ namespace TD
     {
         public GameState gameState { get; set; }
         List<Buttons> buttons;
+
         public MainMenu(List<Texture2D> textures)
         {
             gameState = GameState.MainMenu;
@@ -49,22 +50,6 @@ namespace TD
             {
                 spriteBatch.Draw(item.texture, item.spacePos, item.couleur * item.Transparency);
             }
-        }
-    }
-    class Buttons
-    {
-        public Rectangle spacePos { get; set; }
-        public Texture2D texture { get; set; }
-        public Color couleur { get; set; }
-        public float Transparency { get; set; }
-        public GameState returnState { get; set; }
-        public Buttons(Rectangle _spacePos, Texture2D _texture, Color _couleur, GameState _return)
-        {
-            spacePos = _spacePos;
-            couleur = _couleur;
-            texture = _texture;
-            returnState = _return;
-            Transparency = 1.0f;
         }
     }
 }

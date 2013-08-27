@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -9,14 +9,65 @@ namespace TD
 {
     class MouseHandler
     {
-        public ClickState LeftClickState { get; set; }
-        public ClickState RightClickState { get; set; }
+        //si le leftclickstate est get pendant que c'est cliqué, changer en held
+        private ClickState _left;
+        public ClickState LeftClickState
+        {
+            get
+            {
+                var toReturn = _left;
+                if (_left == ClickState.Clicked)
+                {
+                    _left = ClickState.Held;
+                }
+                return toReturn;
+            }
+            set
+            {
+                _left = value;
+            }
+        }
+        public ClickState RightClickState
+        {
+            get
+            {
+                var toReturn = _right;
+                if (_right == ClickState.Clicked)
+                {
+                    _right = ClickState.Held;
+                }
+                return toReturn;
+            }
+            set
+            {
+                _right = value;
+            }
+        }
         MouseState oldMouseState;
+        public Point fakePos;
+        private ClickState _right;
         public Point position { get; set; }
-        public void Update()
+        public void Update(Camera cam)
         {
             MouseState currentMouseState = Mouse.GetState();
+            if (currentMouseState.X >= GraphicsDeviceManager.DefaultBackBufferWidth)
+            {
+                Mouse.SetPosition(GraphicsDeviceManager.DefaultBackBufferWidth, currentMouseState.Y);
+            }
+            else if (currentMouseState.X <= 0)
+            {
+                Mouse.SetPosition(0, currentMouseState.Y);
+            }
+            else if (currentMouseState.Y >= GraphicsDeviceManager.DefaultBackBufferHeight)
+            {
+                Mouse.SetPosition(currentMouseState.X, GraphicsDeviceManager.DefaultBackBufferHeight);
+            }
+            else if (currentMouseState.Y <= 0)
+            {
+                Mouse.SetPosition(currentMouseState.X, 0);
+            }
             position = new Point(currentMouseState.X, currentMouseState.Y);
+            fakePos = new Point((int)cam.position.X + currentMouseState.X, (int)cam.position.Y + currentMouseState.Y);
             if (currentMouseState.LeftButton == ButtonState.Pressed)
             {
                 if (oldMouseState.LeftButton == ButtonState.Released)
@@ -37,6 +88,28 @@ namespace TD
                 else
                 {
                     LeftClickState = ClickState.Releasing;
+                }
+            }
+            if (currentMouseState.RightButton == ButtonState.Pressed)
+            {
+                if (oldMouseState.RightButton == ButtonState.Released)
+                {
+                    RightClickState = ClickState.Clicked;
+                }
+                else
+                {
+                    RightClickState = ClickState.Held;
+                }
+            }
+            else
+            {
+                if (oldMouseState.RightButton == ButtonState.Released)
+                {
+                    RightClickState = ClickState.Released;
+                }
+                else
+                {
+                    RightClickState = ClickState.Releasing;
                 }
             }
             oldMouseState = currentMouseState;
