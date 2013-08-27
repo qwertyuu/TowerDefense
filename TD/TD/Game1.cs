@@ -11,9 +11,9 @@ using Microsoft.Xna.Framework.Media;
 using System.IO;
 using System.Xml.Serialization;
 
-////////////////
-//LEARN TO CODE
-////////////////
+//////////////////////////
+//LEARN TO CODE GOD DAMMIT
+//////////////////////////
 
 
 namespace TD
@@ -29,13 +29,16 @@ namespace TD
         public static List<Texture2D> menuButtons;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteBatch ui;
         MouseHandler mouse;
         KeyboardHandler keyboard;
         GameState gameState;
+        InGameUI gameUi;
         MainMenu menu;
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
+        Texture2D[] uiTextures;
         Texture2D cellT;
         public List<Tower> towerList;
         Cell[,] map; 
@@ -70,6 +73,7 @@ namespace TD
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            ui = new SpriteBatch(GraphicsDevice);
             menuButtons = new List<Texture2D>();
             map = Cell.Parse("1.txt");
             cam = new Camera(map);
@@ -81,8 +85,13 @@ namespace TD
             towersText = new Texture2D[10];
             towersText[0] = Content.Load<Texture2D>("Tower");
 
+            uiTextures = new Texture2D[10];
+            uiTextures[0] = Content.Load<Texture2D>("planUI");
+
             menu = new MainMenu(menuButtons);
             clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0]);
+
+            gameUi = new InGameUI(uiTextures);
         }
 
         /// <summary>
@@ -153,7 +162,8 @@ namespace TD
                     spriteBatch.End();
                     break;
                 case GameState.InGame:
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
+                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
+                    ui.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
                     foreach (var item in map)
                     {
                         Color a = Color.White;
@@ -174,7 +184,9 @@ namespace TD
                         clippedToMouse.Draw(spriteBatch, 0.5f);
 
                     Tower.PrintAllTowers(towerList, spriteBatch);
+                    gameUi.Draw(ui);
                     spriteBatch.End();
+                    ui.End();
                     break;
                 case GameState.Options:
                     //Draw options

@@ -75,6 +75,7 @@
     <Compile Include="Buttons.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Cell.cs" />
+    <Compile Include="InGameUI.cs" />
     <Compile Include="KeyboardHandler.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Mouse.cs" />
