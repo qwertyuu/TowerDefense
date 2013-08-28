@@ -1,3 +1,4 @@
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.IO;
 using System.Xml.Serialization;
+#endregion
 
 //////////////////////////
 //LEARN TO CODE GOD DAMMIT
