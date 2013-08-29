@@ -13,12 +13,19 @@ using System.Xml.Serialization;
 
 //////////////////////////
 //LEARN TO CODE GOD DAMMIT
+//ou pas
+// IMenu menu;
+// menu = new MainMenu();
+//
+// [Code]
+//
+// menu = new InGameMenu();
 //////////////////////////
 
 
 namespace TD
 {
-    enum GameState { MainMenu, Options, InGame, Quit, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu}
+    enum GameState { MainMenu, Options, InGame, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu}
     enum ClickState { Clicked, Held, Releasing, Released }
 
     /// <summary>
@@ -26,19 +33,20 @@ namespace TD
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static List<Texture2D> menuButtons;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteBatch ui;
+        SpriteFont font;
         MouseHandler mouse;
         KeyboardHandler keyboard;
-        GameState gameState;
         InGameUI gameUi;
-        MainMenu menu;
+        IMenu currentMenu; // <--
+        IMenu mainMenu;
+        IMenu inGameMenu;
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
         Texture2D[] uiTextures;
+        Texture2D[] mainMenuButtons;
         Texture2D cellT;
         public List<Tower> towerList;
         Cell[,] map; 
@@ -73,24 +81,33 @@ namespace TD
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ui = new SpriteBatch(GraphicsDevice);
-            menuButtons = new List<Texture2D>();
+            mainMenuButtons = new Texture2D[3];
             map = Cell.Parse("1.txt");
             cam = new Camera(map);
-            menuButtons.Add(Content.Load<Texture2D>("PlayButton"));
-            menuButtons.Add(Content.Load<Texture2D>("OptsButton"));
+            mainMenuButtons[0] = Content.Load<Texture2D>("PlayButton");
+            mainMenuButtons[1] = Content.Load<Texture2D>("OptsButton");
 
             cellT = Content.Load<Texture2D>("Cell");
+
+            font = Content.Load<SpriteFont>("SpriteFont1");
 
             towersText = new Texture2D[10];
             towersText[0] = Content.Load<Texture2D>("Tower");
 
             uiTextures = new Texture2D[10];
             uiTextures[0] = Content.Load<Texture2D>("planUI");
+            mainMenu = new IMenu(GameState.MainMenu);
+            mainMenu.AddButton("Play", font, mainMenuButtons[0], GameState.LoadingMenu);
+            mainMenu.AddButton("Options", font, mainMenuButtons[1], GameState.Options);
+            mainMenu.AddButton("Quit", font, mainMenuButtons[0], GameState.Quit, Color.Yellow);
 
-            menu = new MainMenu(menuButtons);
+            inGameMenu = new IMenu(GameState.InGameMenu);
+            inGameMenu.AddButton("Play", font, mainMenuButtons[0], GameState.InGame);
+            inGameMenu.AddButton("Main Menu", font, mainMenuButtons[1], GameState.MainMenu);
+
             clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0]);
 
+            currentMenu = mainMenu;
             gameUi = new InGameUI(uiTextures);
         }
 
@@ -113,17 +130,9 @@ namespace TD
             if (IsActive)
             {
                 keyboard.Update();
-                mouse.Update(cam, gameState);
-                switch (gameState)
+                mouse.Update(cam, currentMenu);
+                if(currentMenu == null)
                 {
-                    case GameState.MainMenu:
-                        gameState = menu.UpdateGameState(mouse);
-                        break;
-                    case GameState.Options:
-                        if (keyboard.pressedKeysList.Contains(Keys.Escape))
-                            gameState = GameState.MainMenu;
-                        break;
-                    case GameState.InGame:
                         if (mouse.LeftClickState == ClickState.Clicked)
                             ClipTowersToCell(true);
                         if (mouse.RightClickState == ClickState.Clicked)
@@ -133,15 +142,13 @@ namespace TD
 
 
                         if (keyboard.pressedKeysList.Contains(Keys.Escape))
-                            gameState = GameState.MainMenu;
+                            currentMenu = inGameMenu;
+
                         cam.Update(mouse, gameTime);
-                        break;
-                    case GameState.Quit:
-                        Exit();
-                        break;
-                    default:
-                        break;
                 }
+
+                else 
+                    currentMenu = IMenu.UpdateMenu(mouse, currentMenu);
             }
 
             base.Update(gameTime);
@@ -154,16 +161,10 @@ namespace TD
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            switch (gameState)
+
+            if(currentMenu == null)
             {
-                case GameState.MainMenu:
-                    spriteBatch.Begin();
-                    menu.Draw(spriteBatch);
-                    spriteBatch.End();
-                    break;
-                case GameState.InGame:
-                    spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
-                    ui.Begin();
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
                     foreach (var item in map)
                     {
                         Color a = Color.White;
@@ -180,17 +181,23 @@ namespace TD
                         }
                         spriteBatch.Draw(cellT, item.spacePos, a);
                     }
+                    Tower.PrintAllTowers(towerList, spriteBatch);
+
                     if (clippedToMouse != null)
                         clippedToMouse.Draw(spriteBatch, 0.5f);
 
-                    Tower.PrintAllTowers(towerList, spriteBatch);
-                    gameUi.Draw(ui);
+                    
                     spriteBatch.End();
-                    ui.End();
-                    break;
-                case GameState.Options:
-                    //Draw options
-                    break;
+                    spriteBatch.Begin();
+                    gameUi.Draw(spriteBatch);
+                    spriteBatch.End();
+            }
+
+            else
+            {
+                    spriteBatch.Begin();
+                    IMenu.Draw(spriteBatch, currentMenu);
+                    spriteBatch.End();
             }
             base.Draw(gameTime);
         }
