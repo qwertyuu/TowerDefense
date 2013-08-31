@@ -47,10 +47,10 @@ namespace TD
         public Point fakePos;
         private ClickState _right;
         public Point position { get; set; }
-        public void Update(Camera cam, GameState state)
+        public void Update(Camera cam, IMenu menu)
         {
             MouseState currentMouseState = Mouse.GetState();
-            if (state == GameState.InGame)
+            if (menu == null)
             {
                 if (currentMouseState.X >= GraphicsDeviceManager.DefaultBackBufferWidth)
                 {
