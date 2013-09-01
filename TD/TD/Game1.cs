@@ -25,7 +25,7 @@ using System.Xml.Serialization;
 
 namespace TD
 {
-    enum GameState { MainMenu, Options, InGame, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu}
+    enum GameState { MainMenu, Options, InGame, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu, None}
     enum ClickState { Clicked, Held, Releasing, Released }
 
     /// <summary>
@@ -35,21 +35,19 @@ namespace TD
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont font;
+        public static SpriteFont font;
         MouseHandler mouse;
         KeyboardHandler keyboard;
         InGameUI gameUi;
-        IMenu currentMenu; // <--
-        IMenu mainMenu;
-        IMenu inGameMenu;
+        IMenu currentMenu;
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
         Texture2D[] uiTextures;
-        Texture2D[] mainMenuButtons;
-        Texture2D cellT;
-        public List<Tower> towerList;
-        Cell[,] map; 
+        public Texture2D[] mainMenuButtons;
+        public static Texture2D cellT;
+        IMenu ingamemenu;
+        public static bool _Exit;
 
         public Game1()
         {
@@ -68,7 +66,6 @@ namespace TD
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-            towerList = new List<Tower>();
             mouse = new MouseHandler();
             keyboard = new KeyboardHandler();
         }
@@ -82,8 +79,8 @@ namespace TD
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuButtons = new Texture2D[3];
-            map = Cell.Parse("1.txt");
-            cam = new Camera(map);
+            Map.map = Map.Parse("1.txt");
+            cam = new Camera();
             mainMenuButtons[0] = Content.Load<Texture2D>("PlayButton");
             mainMenuButtons[1] = Content.Load<Texture2D>("OptsButton");
 
@@ -96,19 +93,12 @@ namespace TD
 
             uiTextures = new Texture2D[10];
             uiTextures[0] = Content.Load<Texture2D>("planUI");
-            mainMenu = new IMenu(GameState.MainMenu);
-            mainMenu.AddButton("Play", font, mainMenuButtons[0], GameState.LoadingMenu);
-            mainMenu.AddButton("Options", font, mainMenuButtons[1], GameState.Options);
-            mainMenu.AddButton("Quit", font, mainMenuButtons[0], GameState.Quit, Color.Yellow);
-
-            inGameMenu = new IMenu(GameState.InGameMenu);
-            inGameMenu.AddButton("Play", font, mainMenuButtons[0], GameState.InGame);
-            inGameMenu.AddButton("Main Menu", font, mainMenuButtons[1], GameState.MainMenu);
 
             clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0]);
 
-            currentMenu = mainMenu;
+            currentMenu = new Menus.MainMenu();
             gameUi = new InGameUI(uiTextures);
+            ingamemenu = new Menus.InGameMenu("1.txt");
         }
 
         /// <summary>
@@ -142,7 +132,7 @@ namespace TD
 
 
                         if (keyboard.pressedKeysList.Contains(Keys.Escape))
-                            currentMenu = inGameMenu;
+                            currentMenu = ingamemenu;
 
                         cam.Update(mouse, gameTime);
                 }
@@ -162,10 +152,20 @@ namespace TD
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            if(currentMenu == null)
+            if(_Exit)
             {
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
-                    foreach (var item in map)
+                Exit();
+            }
+            else if (currentMenu == null)
+            {
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
+                foreach (var item in Map.map)
+                {
+                    if (item.contains != null)
+                    {
+                        item.contains.Draw(spriteBatch, 1.0f);
+                    }
+                    else
                     {
                         Color a = Color.White;
                         switch (item.type)
@@ -181,30 +181,28 @@ namespace TD
                         }
                         spriteBatch.Draw(cellT, item.spacePos, a);
                     }
-                    Tower.PrintAllTowers(towerList, spriteBatch);
+                }
 
-                    if (clippedToMouse != null)
-                        clippedToMouse.Draw(spriteBatch, 0.5f);
+                if (clippedToMouse != null)
+                    clippedToMouse.Draw(spriteBatch, 0.5f);
 
-                    
-                    spriteBatch.End();
-                    spriteBatch.Begin();
-                    gameUi.Draw(spriteBatch);
-                    spriteBatch.End();
+
+                spriteBatch.End();
+                spriteBatch.Begin();
+                gameUi.Draw(spriteBatch);
+                spriteBatch.End();
             }
-
             else
             {
-                    spriteBatch.Begin();
-                    IMenu.Draw(spriteBatch, currentMenu);
-                    spriteBatch.End();
+                spriteBatch.Begin();
+                IMenu.Draw(spriteBatch, currentMenu);
+                spriteBatch.End();
             }
             base.Draw(gameTime);
         }
-
         private void ClipTowersToCell(bool click)
         {
-            foreach (var item in map)
+            foreach (var item in Map.map)
             {
                 if (item.spacePos.Contains(mouse.fakePos))
                 {
@@ -213,7 +211,6 @@ namespace TD
                         if (click && item.contains == null)
                         {
                             Tower buf = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0]);
-                            towerList.Add(buf);
                             item.contains = buf;
                         }
                         clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0]);
@@ -229,11 +226,10 @@ namespace TD
 
         private void DeleteTower()
         {
-            foreach (var item in map)
+            foreach (var item in Map.map)
             {
                 if (item.spacePos.Contains(mouse.fakePos) && item.contains != null)
                 {
-                    towerList.Remove(item.contains);
                     item.contains = null;
                 }
             }

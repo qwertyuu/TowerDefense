@@ -78,6 +78,9 @@
     <Compile Include="IMenu.cs" />
     <Compile Include="InGameUI.cs" />
     <Compile Include="KeyboardHandler.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Menus\InGameMenu.cs" />
+    <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
@@ -90,6 +93,9 @@
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>
     <Content Include="1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ToDoList.txt" />
