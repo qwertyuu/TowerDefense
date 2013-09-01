@@ -14,12 +14,6 @@ using System.Xml.Serialization;
 //////////////////////////
 //LEARN TO CODE GOD DAMMIT
 //ou pas
-// IMenu menu;
-// menu = new MainMenu();
-//
-// [Code]
-//
-// menu = new InGameMenu();
 //////////////////////////
 
 
@@ -98,7 +92,7 @@ namespace TD
 
             currentMenu = new Menus.MainMenu();
             gameUi = new InGameUI(uiTextures);
-            ingamemenu = new Menus.InGameMenu("1.txt");
+            ingamemenu = new Menus.InGameMenu(ref cam, "1.txt");
         }
 
         /// <summary>
@@ -137,8 +131,8 @@ namespace TD
                         cam.Update(mouse, gameTime);
                 }
 
-                else 
-                    currentMenu = IMenu.UpdateMenu(mouse, currentMenu);
+                else
+                    currentMenu = IMenu.UpdateMenu(mouse, currentMenu, keyboard);
             }
 
             base.Update(gameTime);
