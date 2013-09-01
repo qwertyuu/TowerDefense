@@ -23,19 +23,6 @@ namespace TD
         public int level;
         public int damage;
 
-        public static void PrintAllTowers(List<Tower> list, SpriteBatch sBatch)
-        {
-            foreach (var item in list)
-            {
-                item.Draw(sBatch, 1.0f);
-            }
-        }
-
-        public Tower()
-        {
-
-        }
-
         public Tower(Point pos, Types _type, Texture2D texture)
         {
             level = 1;
@@ -46,7 +33,7 @@ namespace TD
 
         public void Draw(SpriteBatch sprite, float alpha)
         {
-            sprite.Draw(text, boundingBox, Color.White * alpha);
+            sprite.Draw(text, boundingBox, Color.Red * alpha);
         }
 
         public void levelUp()

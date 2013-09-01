@@ -76,10 +76,10 @@ namespace TD
             return texture;
         }
 
-        public Camera(Cell[,] map)
+        public Camera()
         {
-            mapWidth = map.GetLength(0) * Cell.size;
-            mapHeight = map.GetLength(1) * Cell.size;
+            mapWidth = Map.map.GetLength(0) * Cell.size;
+            mapHeight = Map.map.GetLength(1) * Cell.size;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿#region Using Statements
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,31 +21,22 @@ namespace TD
         public GameState Escape { get; set; }
         public Vector2 centerPoint = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2, GraphicsDeviceManager.DefaultBackBufferHeight / 2);
         public static List<IMenu> lesMenus = new List<IMenu>();
+        
 
-        public IMenu(GameState _gameState)
+        public IMenu()
         {
             buttonsList = new List<Buttons>();
-            gameState = _gameState;
             lesMenus.Add(this);
         }
 
-        public void AddButton(string text, SpriteFont font, Texture2D texture, GameState returnState)
+        public void AddButton(Buttons _button)
         {
-            AddButton(text, font, texture, returnState, Color.White);
-        }
-
-        public void AddButton(string text, SpriteFont font, Texture2D texture, GameState returnState, Color couleur)
-        {
-            Vector2 stringM = font.MeasureString(text) + new Vector2(40);
-            buttonsList.Add(new Buttons(new Rectangle(0, 0, (int)stringM.X, (int)stringM.Y),
-                texture,
-                couleur,
-                returnState,
-                text));
+            buttonsList.Add(_button);
             for (int i = 0; i < buttonsList.Count; i++)
             {
                 Rectangle place = new Rectangle((int)centerPoint.X, (int)centerPoint.Y + (int)((i + ((buttonsList.Count - 1) * -0.5)) * Buttons.variation), buttonsList[i].spacePos.Width, buttonsList[i].spacePos.Height);
                 buttonsList[i].spacePos = new Rectangle(place.X - place.Width / 2, place.Y - place.Height / 2, place.Width, place.Height);
+                buttonsList[i].textSpot = new Vector2(buttonsList[i].textOffset.X + buttonsList[i].spacePos.X, buttonsList[i].textOffset.Y + buttonsList[i].spacePos.Y);
             }
         }
 
@@ -74,20 +65,8 @@ namespace TD
             List<Buttons> currentMenuList = lesMenus.Find(bk => bk == current).buttonsList;
             foreach (var item in currentMenuList)
             {
-                spriteBatch.Draw(item.texture, item.spacePos, item.couleur * item.Transparency);
+                item.Draw(spriteBatch);
             }
-        }
-
-        static public Cell[,] cleanMap(Cell[,] map)
-        {
-            for (int i = 0; i < map.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.GetLength(1); j++)
-                {
-                    map = Cell.Parse("1.txt");
-                }
-            }
-            return map;
         }
     }
 }
