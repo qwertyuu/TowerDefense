@@ -1,10 +1,13 @@
-Content\4g-speed.xnb
 Content\PlayButton.xnb
 Content\OptsButton.xnb
 Content\Tower.xnb
 Content\Cell.xnb
 Content\planUI.xnb
+Content\Icons\deleteIcon.xnb
+Content\UIParts\UI_Bottom.xnb
 Content\SpriteFont1.xnb
+Content\Icons\addIcon.xnb
+Content\Icons\upgradeIcon.xnb
 Content\PlayButton.png
 1.txt
 2.txt
