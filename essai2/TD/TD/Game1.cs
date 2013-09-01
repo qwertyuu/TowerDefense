@@ -27,13 +27,17 @@ namespace TD
 {
     enum GameState { MainMenu, Options, InGame, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu, None}
     enum ClickState { Clicked, Held, Releasing, Released }
+    public enum InGameState { Play, Add, Upgrade }
+    public enum UIButtonFunction { Add, Upgrade, Sell }
 
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        static public InGameState inGameState;
+
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public static SpriteFont font;
         MouseHandler mouse;
@@ -44,6 +48,8 @@ namespace TD
         Tower clippedToMouse;
         Texture2D[] towersText;
         Texture2D[] uiTextures;
+        List<Cell> cellsWithTower;
+        SpriteFont debugFont;
         public Texture2D[] mainMenuButtons;
         public static Texture2D cellT;
         IMenu ingamemenu;
@@ -77,9 +83,11 @@ namespace TD
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            cellsWithTower = new List<Cell>();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuButtons = new Texture2D[3];
             Map.map = Map.Parse("1.txt");
+            debugFont = Content.Load<SpriteFont>("SpriteFont1");
             cam = new Camera();
             mainMenuButtons[0] = Content.Load<Texture2D>("PlayButton");
             mainMenuButtons[1] = Content.Load<Texture2D>("OptsButton");
@@ -92,13 +100,16 @@ namespace TD
             towersText[0] = Content.Load<Texture2D>("Tower");
 
             uiTextures = new Texture2D[10];
-            uiTextures[0] = Content.Load<Texture2D>("planUI");
+            uiTextures[0] = Content.Load<Texture2D>("UIParts/UI_Bottom");
+            uiTextures[1] = Content.Load<Texture2D>("Icons/deleteIcon");
+            uiTextures[2] = Content.Load<Texture2D>("Icons/addIcon");
+            uiTextures[3] = Content.Load<Texture2D>("Icons/upgradeIcon");
 
-            clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0]);
+            clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0], 100, false);
 
             currentMenu = new Menus.MainMenu();
-            gameUi = new InGameUI(uiTextures);
-            ingamemenu = new Menus.InGameMenu(ref cam, "1.txt");
+            gameUi = new InGameUI(uiTextures, ref cellsWithTower);
+            ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,"1.txt");
         }
 
         /// <summary>
@@ -123,18 +134,28 @@ namespace TD
                 mouse.Update(cam, currentMenu);
                 if(currentMenu == null)
                 {
+                    if (!gameUi.textBounds[0].Contains(mouse.position))
+                    {
                         if (mouse.LeftClickState == ClickState.Clicked)
-                            ClipTowersToCell(true);
+                            LeftClick();
+                        else if (mouse.LeftClickState == ClickState.Released)
+                            Hover();
                         if (mouse.RightClickState == ClickState.Clicked)
-                            DeleteTower();
-                        else
-                            ClipTowersToCell(false);
+                            RightClick();
+                    }
+                    else
+                    {
+                        if (clippedToMouse != null)
+                        {
+                            clippedToMouse = null;
+                        }
+                        inGameState = gameUi.Update(inGameState, mouse);
+                    }
 
-
-                        if (keyboard.pressedKeysList.Contains(Keys.Escape))
-                            currentMenu = ingamemenu;
-
-                        cam.Update(mouse, gameTime);
+                    if (keyboard.pressedKeysList.Contains(Keys.Escape))
+                        currentMenu = ingamemenu;
+                    
+                    cam.Update(mouse, gameTime);
                 }
 
                 else
@@ -142,6 +163,70 @@ namespace TD
             }
 
             base.Update(gameTime);
+        }
+
+        private void Hover()
+        {
+            switch (inGameState)
+            {
+                case InGameState.Play:
+                    if (clippedToMouse != null)
+                    {
+                        clippedToMouse = null;
+                    }
+                    break;
+                case InGameState.Add:
+                    ClipTowersToCell(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void LeftClick()
+        {
+            switch (inGameState)
+            {
+                case InGameState.Play:
+                    var pos = mouse.fakePos;
+                    bool hasSelected = false;
+                    foreach (var item in cellsWithTower)
+                    {
+                        if (item.contains.BoundingBox.Contains(pos))
+                        {
+                            Tower.currentTower = item.contains;
+                            hasSelected = true;
+                            break;
+                        }
+                    }
+                    if (!hasSelected)
+                    {
+                        Tower.currentTower = null;
+                    }
+                    break;
+                case InGameState.Add:
+                    if (ClipTowersToCell(true))
+                    {
+                        inGameState = InGameState.Play;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void RightClick()
+        {
+            switch (inGameState)
+            {
+                case InGameState.Play:
+                    break;
+                case InGameState.Add:
+                    inGameState = InGameState.Play;
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
@@ -161,30 +246,38 @@ namespace TD
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, cam.viewMatrix);
                 foreach (var item in Map.map)
                 {
-                    if (item.contains != null)
+                    Color a = Color.White;
+                    switch (item.type)
                     {
-                        item.contains.Draw(spriteBatch, 1.0f);
+                        case Cell.CellTypes.Rock:
+                            a = Color.Brown;
+                            break;
+                        case Cell.CellTypes.Turret:
+                            a = Color.Green;
+                            break;
+                        default:
+                            break;
                     }
-                    else
+                    spriteBatch.Draw(cellT, item.spacePos, a);
+                }
+                foreach (var item in cellsWithTower)
+                {
+                    item.contains.Draw(spriteBatch, 1.0f);
+                }
+                foreach (var item in cellsWithTower)
+                {
+                    if (item.contains.show)
                     {
-                        Color a = Color.White;
-                        switch (item.type)
-                        {
-                            case Cell.CellTypes.Rock:
-                                a = Color.Brown;
-                                break;
-                            case Cell.CellTypes.Turret:
-                                a = Color.Green;
-                                break;
-                            default:
-                                break;
-                        }
-                        spriteBatch.Draw(cellT, item.spacePos, a);
+                        item.contains.DrawRange(spriteBatch);
                     }
                 }
 
                 if (clippedToMouse != null)
+                {
                     clippedToMouse.Draw(spriteBatch, 0.5f);
+                    if (clippedToMouse.show)
+                        clippedToMouse.DrawRange(spriteBatch);
+                }
 
 
                 spriteBatch.End();
@@ -200,21 +293,32 @@ namespace TD
             }
             base.Draw(gameTime);
         }
-        private void ClipTowersToCell(bool click)
+
+
+        private bool ClipTowersToCell(bool click)
         {
+            var pos = mouse.fakePos;
             foreach (var item in Map.map)
             {
-                if (item.spacePos.Contains(mouse.fakePos))
+                if (item.spacePos.Contains(pos))
                 {
                     if (item.type == Cell.CellTypes.Turret)
                     {
                         if (click && item.contains == null)
                         {
-                            Tower buf = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0]);
+                            Tower buf = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, false);
                             item.contains = buf;
+                            cellsWithTower.Add(item);
                         }
-                        clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0]);
-                        break;
+                        if (clippedToMouse == null)
+                        {
+                            clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
+                        }
+                        else if (clippedToMouse.boundingBox != item.spacePos)
+                        {
+                            clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
+                        }
+                        return true;
                     }
                     else
                     {
@@ -222,17 +326,22 @@ namespace TD
                     }
                 }
             }
+            return false;
         }
 
-        private void DeleteTower()
+        private bool DeleteTower()
         {
+            var pos = mouse.fakePos;
             foreach (var item in Map.map)
             {
-                if (item.spacePos.Contains(mouse.fakePos) && item.contains != null)
+                if (item.spacePos.Contains(pos) && item.contains != null)
                 {
                     item.contains = null;
+                    cellsWithTower.Remove(item);
+                    return true;
                 }
             }
+            return false;
         }
     }
 }

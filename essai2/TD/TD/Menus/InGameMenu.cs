@@ -16,13 +16,15 @@ namespace TD.Menus
     {
         string level;
         Camera cam;
+        List<Cell> cellWithTowers;
 
-        public InGameMenu(ref Camera _cam, string lvl = "1.txt")
+        public InGameMenu(ref Camera _cam, ref List<Cell> _cellWithTowers, string lvl = "1.txt")
         {
             gameState = GameState.InGameMenu;
             Escape = GameState.InGame;
             level = lvl;
             cam = _cam;
+            cellWithTowers = _cellWithTowers;
 
             Buttons returnToGame = new Buttons();
             returnToGame.text = "Go back to game";
@@ -47,6 +49,8 @@ namespace TD.Menus
         {
             Map.map = Map.Parse("1.txt");
             cam.position = Vector2.Zero;
+            cellWithTowers.Clear();
+            Game1.inGameState = InGameState.Play;
         }
     }
 }

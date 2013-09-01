@@ -38,7 +38,7 @@ namespace TD
                 textOffset = new Vector2(spacePos.Width / 2 - buf.X / 2, spacePos.Height / 2 - buf.Y / 2);
             }
         }
-        public static float variation = 100;
+        public static float variation = 50;
         public bool offset { get; set; }
         public string text { get; set; }
         public float Transparency = 1;
