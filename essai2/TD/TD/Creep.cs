@@ -18,13 +18,13 @@ namespace TD
         public enum Types { type1, type2 }
 
         public Rectangle boundingBox { get; set; }
+        public Dictionary<Tower, double> distances = new Dictionary<Tower, double>();
         private int index;
         public Vector2 vectorPos { get; set; }
         public Vector2 direction { get; set; }
         public Vector2 destination { get; set; }
-        public double tempDist { get; set; }
         public int speed { get; set; }
-        public bool IsDead { get { return life == 0; } }
+        public bool IsDead { get { return life <= 0; } }
         public int life;
         public Types type { get; set; }
         public Texture2D text;
@@ -44,6 +44,7 @@ namespace TD
 
         public void Update(GameTime gameTime)
         {
+            distances.Clear();
             if (vectorPos != destination)
             {
                 direction = Vector2.Normalize(destination - vectorPos);

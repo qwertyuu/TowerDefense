@@ -17,11 +17,8 @@ namespace TD
     public class Tower
     {
         public enum Types { type1, swag }
-        public List<double> distance { get; set; }
+        public List<Creep> AvailableCreeps = new List<Creep>();
         public bool inCooldown { get; set; }
-
-
-        //public Creep creepToAttack { get; set; }
         private int _Range;
         public int Range
         {
@@ -45,41 +42,6 @@ namespace TD
         public Vector2 rangePos { get; set; }
         public Texture2D cercle { get; set; }
         public Texture2D text;
-        //private static Tower _currentTower;
-        //public static Tower currentTower
-        //{
-        //    get
-        //    {
-        //        return _currentTower;
-        //    }
-        //    set
-        //    {
-        //        if (value == null)
-        //        {
-        //            InGameUI.SetButtons();
-        //            if (_currentTower != null)
-        //            {
-        //                _currentTower.show = false;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (value != _currentTower)
-        //            {
-        //                if (_currentTower != null)
-        //                {
-        //                    _currentTower.show = false;
-        //                }
-        //            }
-        //            InGameUI.SetButtons(value);
-        //        }
-        //        _currentTower = value;
-        //        if (_currentTower != null)
-        //        {
-        //            _currentTower.show = true;
-        //        }
-        //    }
-        //}
         private Rectangle _boundingBox;
         public Rectangle boundingBox
         {
@@ -145,11 +107,11 @@ namespace TD
 
         public void Update(GameTime gameTime)
         {
-            var lol = CreepWave.inGameCreeps.Where(bk => (bk.tempDist = DetectCreep(bk)) <= Range)
-                               .OrderBy(bk => bk.tempDist).ToList();
-            if (lol.Count > 0)
+            if (AvailableCreeps.Count > 0)
             {
-                Attack(lol[0]);
+                double minimum = AvailableCreeps.Min(bK => bK.distances[this]);
+                var lol = AvailableCreeps.Find(bk => bk.distances[this] <= minimum);
+                Attack(lol);
             }
 
 
@@ -160,10 +122,11 @@ namespace TD
                     if (projectiles[i].Update(gameTime))
                     {
                         projectiles.RemoveAt(i);
+                        i--;
                     }
                 }
             }
-
+            AvailableCreeps.Clear();
         }
 
         private void Attack(Creep item)
@@ -202,7 +165,7 @@ namespace TD
             Range += 30;
         }
 
-        public double DetectCreep(Creep creep)
+        public static double DetectCreep(Creep creep, Tower tower)
         {
             //a^2+b^2=c^2
             //c = SQRT(a^2+b^2)
@@ -214,8 +177,8 @@ namespace TD
             double smallest = double.MaxValue;
             foreach (var item in corners)
             {
-                int deltaX = boundingBox.Center.X - item.X;
-                int deltaY = boundingBox.Center.Y - item.Y;
+                int deltaX = tower.boundingBox.Center.X - item.X;
+                int deltaY = tower.boundingBox.Center.Y - item.Y;
                 var dist = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
                 if (dist < smallest)
                 {

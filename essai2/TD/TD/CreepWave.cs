@@ -26,7 +26,7 @@ namespace TD
             }
             nextWave = DateTime.Now.AddMilliseconds(speed);
         }
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, List<Cell> cellsWithTowers)
         {
             if (toSpawn.Count > 0)
             {
@@ -52,10 +52,20 @@ namespace TD
                         Game1.SelectedObject = null;
                     }
                     inGameCreeps.RemoveAt(i);
+                    i--;
                 }
                 else
                 {
                     inGameCreeps[i].Update(gameTime);
+                    foreach (var item in cellsWithTowers)
+                    {
+                        double distance = Tower.DetectCreep(inGameCreeps[i], item.contains);
+                        if (distance <= item.contains.Range)
+                        {
+                            item.contains.AvailableCreeps.Add(inGameCreeps[i]);
+                            inGameCreeps[i].distances.Add(item.contains, distance);
+                        }
+                    }
                 }
             }
         }

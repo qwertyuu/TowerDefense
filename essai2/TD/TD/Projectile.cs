@@ -27,7 +27,7 @@ namespace TD
         public Projectile(Texture2D texture, Tower tower, Creep _aim)
         {
             text = texture;
-            speed = 800f;
+            speed = 900f;
             thetower = tower;
             aim = _aim;
             boundingBox = new Rectangle(tower.boundingBox.Center.X, tower.boundingBox.Center.Y, 5, 15);

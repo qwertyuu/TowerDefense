@@ -104,7 +104,7 @@ namespace TD
         Texture2D[] uiTextures;
         public static Texture2D creepText;
         public static string currentMap = "11.txt";
-        List<Cell> cellsWithTower;
+        static List<Cell> cellsWithTower;
         SpriteFont debugFont;
         public static Texture2D missileText;
         public Texture2D[] mainMenuButtons;
@@ -219,12 +219,11 @@ namespace TD
 
                     if (keyboard.pressedKeysList.Contains(Keys.Escape))
                         currentMenu = ingamemenu;
-
+                    wave.Update(gameTime, cellsWithTower);
                     for (int i = 0; i < cellsWithTower.Count; i++)
                     {
                         cellsWithTower[i].contains.Update(gameTime);
                     }
-                    wave.Update(gameTime);
 
                     cam.Update(mouse, gameTime, gameUi);
                 }
@@ -355,6 +354,7 @@ namespace TD
                     if (item.contains.show)
                     {
                         item.contains.DrawRange(spriteBatch);
+                        break;
                     }
                 }
 
