@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Text;
 #endregion
 
 namespace TD
@@ -19,18 +20,20 @@ namespace TD
         public Rectangle[] textBounds;
         static List<UIButtons> buttonList;
         static List<UIButtons> allButtons;
+        public Vector2 infoPos { get; set; }
+        StringBuilder sB;
         List<Cell> cellsWithTower;
         const float transparencyLvl = 1.0f;
 
         public InGameUI(Texture2D[] listOfTexture, ref List<Cell> cellWithTower)
         {
+            sB = new StringBuilder();
             cellsWithTower = cellWithTower;
             textures = listOfTexture;
             textBounds = new Rectangle[textures.Length];
             textBounds[0] = new Rectangle(0, GraphicsDeviceManager.DefaultBackBufferHeight - (textures[0].Height + 2), textures[0].Width, textures[0].Height + 2);
             buttonList = new List<UIButtons>();
             allButtons = new List<UIButtons>();
-            setTexturesPosition();
 
             UIButtons add = new UIButtons();
             add.icon = listOfTexture[2];
@@ -44,12 +47,11 @@ namespace TD
             UIButtons upgrade = new UIButtons();
             upgrade.icon = listOfTexture[3];
             upgrade.couleur = Color.White;
-            upgrade.returnState = InGameState.Upgrade;
+            upgrade.returnState = InGameState.Play;
             upgrade.function = UIButtonFunction.Upgrade;
             upgrade.spacePos = new Rectangle(15, 425, 40, 40);
             upgrade.Clic += upgrade_Clic;
             allButtons.Add(upgrade);
-            SetButtons();
 
             UIButtons sell = new UIButtons();
             sell.icon = listOfTexture[1];
@@ -60,22 +62,23 @@ namespace TD
             sell.doAnimation = false;
             sell.Clic += sell_Clic;
             allButtons.Add(sell);
+            SetButtons();
+            infoPos = new Vector2(135, 375);
 
         }
 
         void upgrade_Clic(object sender, EventArgs e)
         {
-            Tower.currentTower.levelUp();
-        }
-
-        private void setTexturesPosition()
-        {
-            //textBounds[0] = new Rectangle(0, 0, GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            if (Game1.SelectedObject.GetType() == typeof(Tower))
+            {
+                ((Tower)Game1.SelectedObject).levelUp();
+            }
         }
 
         public void Draw(SpriteBatch sprite)
         {
             sprite.Draw(textures[0], textBounds[0], Color.White * transparencyLvl);
+            sprite.DrawString(Game1.font, sB, infoPos, Color.White);
             foreach (var item in buttonList)
             {
                 item.Draw(sprite);
@@ -84,7 +87,7 @@ namespace TD
 
         void sell_Clic(object sender, EventArgs e)
         {
-            var sellBuffer = cellsWithTower.Find(bk => bk.contains == Tower.currentTower);
+            var sellBuffer = cellsWithTower.Find(bk => bk.contains == Game1.SelectedObject);
             cellsWithTower.Remove(sellBuffer);
             foreach (var item in Map.map)
             {
@@ -94,16 +97,18 @@ namespace TD
                     break;
                 }
             }
-            Tower.currentTower = null;
+
+            if(Game1.SelectedObject.GetType() == typeof(Tower))
+                Game1.SelectedObject = null;
         }
 
         void add_Clic(object sender, EventArgs e)
         {
             Game1.inGameState = InGameState.Add;
-            Tower.currentTower = null;
+            Game1.SelectedObject = null;
         }
 
-        internal InGameState Update(InGameState current, MouseHandler mouse)
+        public void Update(MouseHandler mouse)
         {
             foreach (var item in buttonList)
             {
@@ -112,7 +117,7 @@ namespace TD
                     if (mouse.LeftClickState == ClickState.Clicked)
                     {
                         item.Clicked();
-                        return item.returnState;
+                        Game1.inGameState = item.returnState;
                     }
                     else if (mouse.LeftClickState == ClickState.Releasing)
                     {
@@ -124,21 +129,45 @@ namespace TD
                     item.Released();
                 }
             }
-            return current;
+            SetUIText();
         }
 
-        internal static void SetButtons(Tower tower)
+        private void SetUIText()
         {
-            List<UIButtons> buf = new List<UIButtons>();
-            foreach (var item in tower.neededFunctions)
+            sB.Clear();
+            if (Game1.SelectedObject != null)
             {
-                buf.Add(allButtons.Find(bk => bk.function == item));
+                if (Game1.SelectedObject.GetType() == typeof(Tower))
+                {
+                    sB.Append(string.Format("Dommage:{0}\nRange:{1}\nVitesse:{2}",
+                ((Tower)Game1.SelectedObject).damage, ((Tower)Game1.SelectedObject).Range, 1 / (((Tower)Game1.SelectedObject).speed / 1000d)));
+                }
+                else
+                {
+                    sB.Append(string.Format("HP:{0}/100", ((Creep)Game1.SelectedObject).life));
+                }
             }
-            buttonList = buf;
+            else
+            {
+                sB.Append("Aucune tour selectionnee");
+            }
         }
 
         internal static void SetButtons()
         {
+            if (Game1.SelectedObject != null)
+            {
+                if (Game1.SelectedObject.GetType() == typeof(Tower))
+                {
+                    List<UIButtons> buf = new List<UIButtons>();
+                    foreach (var item in ((Tower)Game1.SelectedObject).neededFunctions)
+                    {
+                        buf.Add(allButtons.Find(bk => bk.function == item));
+                    }
+                    buttonList = buf;
+                    return;
+                }
+            }
             buttonList = allButtons.Where(bk => bk.returnState == InGameState.Add).ToList();
         }
     }

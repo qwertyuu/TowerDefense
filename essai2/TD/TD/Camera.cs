@@ -20,7 +20,7 @@ namespace TD
         int maxY = GraphicsDeviceManager.DefaultBackBufferHeight - treshold;
         int minY = treshold;
 
-        public void Update(MouseHandler mouse, GameTime gametime)
+        public void Update(MouseHandler mouse, GameTime gametime, InGameUI uI)
         {
             if (mouse.position.X > maxX)
                 position.X += (float)(speed * gametime.ElapsedGameTime.TotalSeconds);
@@ -40,8 +40,8 @@ namespace TD
             else if (position.X < 0)
                 position.X = 0;
 
-            if (position.Y + GraphicsDeviceManager.DefaultBackBufferHeight >= mapHeight)
-                position.Y = mapHeight - GraphicsDeviceManager.DefaultBackBufferHeight;
+            if (position.Y + (GraphicsDeviceManager.DefaultBackBufferHeight - uI.textBounds[0].Height) >= mapHeight)
+                position.Y = mapHeight - (GraphicsDeviceManager.DefaultBackBufferHeight - uI.textBounds[0].Height);
 
             else if (position.Y < 0)
                 position.Y = 0;

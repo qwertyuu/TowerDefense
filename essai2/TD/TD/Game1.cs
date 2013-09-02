@@ -38,6 +38,59 @@ namespace TD
         static public InGameState inGameState;
 
         public static GraphicsDeviceManager graphics;
+        private static object _selectedObject;
+        public static object SelectedObject
+        {
+            get
+            {
+                return _selectedObject;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (_selectedObject != null)
+                    {
+                        if (_selectedObject.GetType() == typeof(Tower))
+                        {
+                            ((Tower)_selectedObject).show = false;
+                        }
+                        else
+                        {
+                            ((Creep)_selectedObject).show = false;
+                        }
+                    }
+                    _selectedObject = value;
+                }
+                else
+                {
+                    if (value != _selectedObject)
+                    {
+                        if (value.GetType() == typeof(Tower))
+                        {
+                            ((Tower)value).show = true;
+                        }
+                        else
+                        {
+                            ((Creep)value).show = true;
+                        }
+                        if (_selectedObject != null)
+                        {
+                            if (_selectedObject.GetType() == typeof(Tower))
+                            {
+                                ((Tower)_selectedObject).show = false;
+                            }
+                            else
+                            {
+                                ((Creep)_selectedObject).show = false;
+                            }
+                        }
+                    }
+                    _selectedObject = value;
+                }
+                InGameUI.SetButtons();
+            }
+        }
         SpriteBatch spriteBatch;
         public static SpriteFont font;
         MouseHandler mouse;
@@ -47,9 +100,13 @@ namespace TD
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
+        CreepWave wave;
         Texture2D[] uiTextures;
+        public static Texture2D creepText;
+        public static string currentMap = "11.txt";
         List<Cell> cellsWithTower;
         SpriteFont debugFont;
+        public static Texture2D missileText;
         public Texture2D[] mainMenuButtons;
         public static Texture2D cellT;
         IMenu ingamemenu;
@@ -72,6 +129,7 @@ namespace TD
         {
             // TODO: Add your initialization logic here
             base.Initialize();
+            
             mouse = new MouseHandler();
             keyboard = new KeyboardHandler();
         }
@@ -83,12 +141,16 @@ namespace TD
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            //currentLevel = 5;
             cellsWithTower = new List<Cell>();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuButtons = new Texture2D[3];
-            Map.map = Map.Parse("1.txt");
+            Map.map = Map.Parse(currentMap);
             debugFont = Content.Load<SpriteFont>("SpriteFont1");
             cam = new Camera();
+            cam.position = new Vector2(0, Map.initialPathLocation.Y - GraphicsDeviceManager.DefaultBackBufferHeight / 2);
+            missileText = Content.Load<Texture2D>("Missile");
+
             mainMenuButtons[0] = Content.Load<Texture2D>("PlayButton");
             mainMenuButtons[1] = Content.Load<Texture2D>("OptsButton");
 
@@ -109,7 +171,10 @@ namespace TD
 
             currentMenu = new Menus.MainMenu();
             gameUi = new InGameUI(uiTextures, ref cellsWithTower);
-            ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,"1.txt");
+            ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,currentMap);
+
+            creepText = Content.Load<Texture2D>("Creep");
+            wave = new CreepWave(30);
         }
 
         /// <summary>
@@ -149,13 +214,19 @@ namespace TD
                         {
                             clippedToMouse = null;
                         }
-                        inGameState = gameUi.Update(inGameState, mouse);
                     }
+                    gameUi.Update(mouse);
 
                     if (keyboard.pressedKeysList.Contains(Keys.Escape))
                         currentMenu = ingamemenu;
-                    
-                    cam.Update(mouse, gameTime);
+
+                    for (int i = 0; i < cellsWithTower.Count; i++)
+                    {
+                        cellsWithTower[i].contains.Update(gameTime);
+                    }
+                    wave.Update(gameTime);
+
+                    cam.Update(mouse, gameTime, gameUi);
                 }
 
                 else
@@ -190,20 +261,35 @@ namespace TD
                 case InGameState.Play:
                     var pos = mouse.fakePos;
                     bool hasSelected = false;
+
                     foreach (var item in cellsWithTower)
                     {
-                        if (item.contains.BoundingBox.Contains(pos))
+                        if (item.contains.boundingBox.Contains(pos))
                         {
-                            Tower.currentTower = item.contains;
+                            Game1.SelectedObject = item.contains;
                             hasSelected = true;
                             break;
                         }
                     }
                     if (!hasSelected)
                     {
-                        Tower.currentTower = null;
+                        foreach (var item in CreepWave.inGameCreeps)
+                        {
+                            if (item.boundingBox.Contains(pos))
+                            {
+                                Game1.SelectedObject = item;
+                                hasSelected = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!hasSelected)
+                    {
+                        Game1.SelectedObject = null;
                     }
                     break;
+
                 case InGameState.Add:
                     if (ClipTowersToCell(true))
                     {
@@ -260,10 +346,10 @@ namespace TD
                     }
                     spriteBatch.Draw(cellT, item.spacePos, a);
                 }
+
                 foreach (var item in cellsWithTower)
-                {
                     item.contains.Draw(spriteBatch, 1.0f);
-                }
+
                 foreach (var item in cellsWithTower)
                 {
                     if (item.contains.show)
@@ -271,6 +357,8 @@ namespace TD
                         item.contains.DrawRange(spriteBatch);
                     }
                 }
+
+                wave.Draw(spriteBatch);
 
                 if (clippedToMouse != null)
                 {
@@ -316,10 +404,12 @@ namespace TD
                         }
                         else if (clippedToMouse.boundingBox != item.spacePos)
                         {
-                            clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
+                            clippedToMouse.boundingBox = item.spacePos;
+                            //clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
                         }
                         return true;
                     }
+
                     else
                     {
                         clippedToMouse = null;

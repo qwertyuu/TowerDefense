@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDContent", "TD\TDContent\T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapMaker", "MapMaker\MapMaker\MapMaker.csproj", "{D4CAF2FC-FCCB-45AD-B107-58F6CB7E04B1}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MapMakerContent", "MapMaker\MapMakerContent\MapMakerContent.contentproj", "{8758196D-EC55-4FA0-B27E-A16CB5291C26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapMakerContent", "MapMaker\MapMakerContent\MapMakerContent.contentproj", "{8758196D-EC55-4FA0-B27E-A16CB5291C26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
