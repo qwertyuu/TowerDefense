@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace MapMaker
 {
@@ -53,9 +54,10 @@ namespace MapMaker
             // Create a new SpriteBatch, which can be used to draw textures.
             texture = Content.Load<Texture2D>("Cell");
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            grid = new Grille();
+            grid = Grille.Parse(Content.Load<Texture2D>("map1"));
             cam = new Camera(grid);
             mouse = new MouseHandler();
+            changed = new List<Cell>();
             // TODO: use this.Content to load your game content here
         }
 
@@ -85,12 +87,16 @@ namespace MapMaker
                     if (item.position.Contains(mouse.fakePos))
                     {
                         item.SwitchKind();
+                        changed.Add(item);
                     }
                 }
             }
             else if (mouse.LeftClickState == ClickState.Releasing)
             {
-
+                foreach (var item in changed)
+                {
+                    item.changed = false;
+                }
             }
 
             cam.Update(mouse, gameTime);
@@ -101,7 +107,37 @@ namespace MapMaker
         }
         protected override void OnExiting(object sender, EventArgs args)
         {
-
+            if (!Directory.Exists("maps"))
+            {
+                Directory.CreateDirectory("maps");
+            }
+            var a = Directory.GetFiles("maps", "*.txt", SearchOption.TopDirectoryOnly);
+            int highest = 0;
+            foreach (var item in a)
+            {
+                int buf = 0;
+                if (int.TryParse(Path.GetFileNameWithoutExtension(item), out buf))
+                {
+                    if (buf > highest)
+                    {
+                        highest = buf;
+                    }
+                }
+            }
+            using (TextWriter tW = new StreamWriter("maps/" + (highest + 1) + ".txt"))
+            {
+                for (int i = 0; i < grid.cellules.GetLength(1); i++)
+                {
+                    for (int j = 0; j < grid.cellules.GetLength(0); j++)
+                    {
+                        tW.Write(grid.cellules[j, i].chiffre);
+                    }
+                    if (i != grid.cellules.GetLength(1) - 1)
+                    {
+                        tW.Write(Environment.NewLine);
+                    }
+                }
+            }
             base.OnExiting(sender, args);
         }
 

@@ -24,6 +24,8 @@ namespace TD
             get { return _couleur; }
             set
             {
+
+
                 _couleur = value;
                 if (tempColor == new Color())
                 {
@@ -48,21 +50,17 @@ namespace TD
         internal void Released()
         {
             if (doAnimation)
-            {
                 couleur = tempColor;
-            }
+
             if (this.Release != null)
-            {
                 this.Release(this, new EventArgs());
-            }
         }
 
         internal void Clicked()
         {
             if (doAnimation)
-            {
                 couleur = Color.Black * 0.5f;
-            }
+
             if (this.Clic != null)
             {
                 this.Clic(this, new EventArgs());

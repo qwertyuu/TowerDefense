@@ -47,7 +47,7 @@ namespace TD.Menus
 
         void menu_Clic(object sender, EventArgs e)
         {
-            Map.map = Map.Parse("1.txt");
+            Map.map = Map.Parse(Game1.currentMap);
             cam.position = Vector2.Zero;
             cellWithTowers.Clear();
             Game1.inGameState = InGameState.Play;
