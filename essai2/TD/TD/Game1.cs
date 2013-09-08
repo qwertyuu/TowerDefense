@@ -15,11 +15,6 @@ using System.Xml.Serialization;
 //LEARN TO CODE GOD DAMMIT
 //ou pas
 // IMenu menu;
-// menu = new MainMenu();
-//
-// [Code]
-//
-// menu = new InGameMenu();
 //////////////////////////
 
 
@@ -130,7 +125,6 @@ namespace TD
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-            
             mouse = new MouseHandler();
             keyboard = new KeyboardHandler();
         }
