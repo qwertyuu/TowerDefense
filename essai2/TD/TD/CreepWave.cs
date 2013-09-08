@@ -17,7 +17,7 @@ namespace TD
         public DateTime nextWave { get; set; }
         public CreepWave(int numberOfIndividuals)
         {
-            speed = 500;
+            speed = 1000;
             toSpawn = new Stack<Creep>();
             inGameCreeps = new List<Creep>();
             for (int i = 0; i < numberOfIndividuals; i++)
