@@ -59,7 +59,7 @@ namespace TD
 
         public void Draw(SpriteBatch sprite)
         {
-            sprite.Draw(text, boundingBox, null, Color.White, MathHelper.ToRadians(MathHelper.ToDegrees((float)Math.Atan2(destination.Y - pos.Y,destination.X - pos.X)) + 90) , new Vector2(text.Width / 2, text.Height / 2), SpriteEffects.None, 0);
+            sprite.Draw(text, boundingBox, null, Color.White,(float)(Math.Atan2(destination.Y - pos.Y,destination.X - pos.X) + Math.PI / 2) , new Vector2(text.Width / 2, text.Height / 2), SpriteEffects.None, 0);
         }
     }
 }

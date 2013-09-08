@@ -29,18 +29,16 @@ namespace TD
             set
             {
                 _Range = value;
-                cercle = Camera.CreateCircle(Range);
-                rangePos = SetRangePos(cercle);
+                rangePos = SetRangePos();
             }
         }
 
-        private Vector2 SetRangePos(Texture2D cercle)
+        private Rectangle SetRangePos()
         {
-            return new Vector2(boundingBox.Center.X - (cercle.Width / 2), boundingBox.Center.Y - (cercle.Height / 2));
+            return new Rectangle(boundingBox.Center.X - Range, boundingBox.Center.Y - Range, Range * 2, Range * 2);
         }
 
-        public Vector2 rangePos { get; set; }
-        public Texture2D cercle { get; set; }
+        public Rectangle rangePos { get; set; }
         public Texture2D text;
         private Rectangle _boundingBox;
         public Rectangle boundingBox
@@ -52,10 +50,7 @@ namespace TD
             set
             {
                 _boundingBox = value;
-                if (cercle != null)
-                {
-                    rangePos = SetRangePos(cercle);
-                }
+                rangePos = SetRangePos();
             }
         }
         public Types type;
@@ -131,8 +126,6 @@ namespace TD
 
         private void Attack(Creep item)
         {
-            //creepToAttack = item;
-
             if (!inCooldown)
             {
                 projectiles.Add(new Projectile(Game1.missileText, this, item));
@@ -147,7 +140,7 @@ namespace TD
 
         public void DrawRange(SpriteBatch sprite)
         {
-            sprite.Draw(cercle, rangePos, Color.Blue * 0.3f);
+            sprite.Draw(Game1.towerRange, rangePos, Color.White * 0.3f);
         }
 
         public void levelUp()

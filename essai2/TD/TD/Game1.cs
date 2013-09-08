@@ -97,6 +97,7 @@ namespace TD
         KeyboardHandler keyboard;
         InGameUI gameUi;
         IMenu currentMenu;
+        public static Texture2D towerRange;
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
@@ -147,6 +148,7 @@ namespace TD
             mainMenuButtons = new Texture2D[3];
             Map.map = Map.Parse(currentMap);
             debugFont = Content.Load<SpriteFont>("SpriteFont1");
+            towerRange = Content.Load<Texture2D>("range");
             cam = new Camera();
             cam.position = new Vector2(0, Map.initialPathLocation.Y - GraphicsDeviceManager.DefaultBackBufferHeight / 2);
             missileText = Content.Load<Texture2D>("Missile");
