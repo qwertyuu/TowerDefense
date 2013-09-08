@@ -39,7 +39,6 @@ namespace TD
         }
 
         public Rectangle rangePos { get; set; }
-        //public Texture2D cercle { get; set; }
         public Texture2D text;
         private Rectangle _boundingBox;
         public Rectangle boundingBox
@@ -127,8 +126,6 @@ namespace TD
 
         private void Attack(Creep item)
         {
-            //creepToAttack = item;
-
             if (!inCooldown)
             {
                 projectiles.Add(new Projectile(Game1.missileText, this, item));
