@@ -388,7 +388,7 @@ namespace TD
             {
                 if (item.spacePos.Contains(pos))
                 {
-                    if (item.type == Cell.CellTypes.Turret)
+                    if (item.type == Cell.CellTypes.Turret && item.contains == null)
                     {
                         if (click && item.contains == null)
                         {
