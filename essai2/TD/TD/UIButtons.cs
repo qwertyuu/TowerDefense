@@ -66,5 +66,7 @@ namespace TD
                 this.Clic(this, new EventArgs());
             }
         }
+
+        public Keys Hotkey { get; set; }
     }
 }

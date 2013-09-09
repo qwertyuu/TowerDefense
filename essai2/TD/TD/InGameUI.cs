@@ -37,6 +37,7 @@ namespace TD
 
             UIButtons add = new UIButtons();
             add.icon = listOfTexture[2];
+            add.Hotkey = Keys.A;
             add.couleur = Color.White;
             add.returnState = InGameState.Add;
             add.function = UIButtonFunction.Add;
@@ -46,6 +47,7 @@ namespace TD
 
             UIButtons upgrade = new UIButtons();
             upgrade.icon = listOfTexture[3];
+            upgrade.Hotkey = Keys.U;
             upgrade.couleur = Color.White;
             upgrade.returnState = InGameState.Play;
             upgrade.function = UIButtonFunction.Upgrade;
@@ -55,6 +57,7 @@ namespace TD
 
             UIButtons sell = new UIButtons();
             sell.icon = listOfTexture[1];
+            sell.Hotkey = Keys.S;
             sell.couleur = Color.White;
             sell.spacePos = new Rectangle(65, 425, 40, 40);
             sell.returnState = InGameState.Play;
@@ -108,23 +111,16 @@ namespace TD
             Game1.SelectedObject = null;
         }
 
-        public void Update(MouseHandler mouse)
+        public void Update(MouseHandler mouse, KeyboardHandler kB)
         {
             foreach (var item in buttonList)
             {
-                if (item.spacePos.Contains(mouse.position))
+                if ((item.spacePos.Contains(mouse.position) && mouse.LeftClickState == ClickState.Clicked) || kB.pressedKeysList.Contains(item.Hotkey))
                 {
-                    if (mouse.LeftClickState == ClickState.Clicked)
-                    {
-                        item.Clicked();
-                        Game1.inGameState = item.returnState;
-                    }
-                    else if (mouse.LeftClickState == ClickState.Releasing)
-                    {
-                        item.Released();
-                    }
+                    item.Clicked();
+                    Game1.inGameState = item.returnState;
                 }
-                else
+                else if (mouse.LeftClickState == ClickState.Releasing || kB.releasedKeysList.Contains(item.Hotkey))
                 {
                     item.Released();
                 }

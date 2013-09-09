@@ -58,7 +58,15 @@ namespace TD
             else
             {
                 index++;
-                destination = new Vector2(Map.waypoints[index].spacePos.Location.X, Map.waypoints[index].spacePos.Location.Y);
+                if (index < Map.waypoints.Count)
+                {
+                    destination = new Vector2(Map.waypoints[index].spacePos.Location.X, Map.waypoints[index].spacePos.Location.Y);
+                }
+                else
+                {
+                    life = 0;
+                    //enlever une vie au joueur
+                }
             }
         }
 

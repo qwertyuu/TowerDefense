@@ -20,18 +20,20 @@ namespace TD.Menus
             gameState = GameState.MainMenu;
             Buttons play = new Buttons();
             play.text = "Play";
-            play.font = Game1.font;
-            play.texture = Game1.cellT;
             play.couleur = Color.Blue;
             play.returnState = GameState.InGame;
             AddButton(play);
 
+            Buttons options = new Buttons();
+            options.text = "Options";
+            options.couleur = Color.White;
+            options.fontColor = Color.Black;
+            options.returnState = GameState.Options;
+            AddButton(options);
+
             Buttons quit = new Buttons();
             quit.text = "Quit";
-            quit.font = Game1.font;
-            quit.texture = Game1.cellT;
             quit.couleur = Color.Orange;
-            quit.returnState = GameState.None;
             quit.Clic += quit_Clic;
             AddButton(quit);
         }

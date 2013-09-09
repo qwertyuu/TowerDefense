@@ -38,9 +38,23 @@ namespace TD
                 textOffset = new Vector2(spacePos.Width / 2 - buf.X / 2, spacePos.Height / 2 - buf.Y / 2);
             }
         }
+        public Buttons()
+        {
+            this.texture = Game1.cellT;
+            this.returnState = GameState.None;
+        }
         public static float variation = 50;
         public bool offset { get; set; }
-        public string text { get; set; }
+        private string _text;
+        public string text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                this.font = Game1.font;
+            }
+        }
         public float Transparency = 1;
 
         public GameState returnState { get; set; }

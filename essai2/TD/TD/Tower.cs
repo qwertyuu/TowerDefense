@@ -104,9 +104,9 @@ namespace TD
         {
             if (AvailableCreeps.Count > 0)
             {
-                double minimum = AvailableCreeps.Min(bK => bK.distances[this]);
-                var lol = AvailableCreeps.Find(bk => bk.distances[this] <= minimum);
-                Attack(lol);
+                //double minimum = AvailableCreeps.Min(bK => bK.distances[this]);
+                //var lol = AvailableCreeps.Find(bk => bk.distances[this] <= minimum);
+                Attack(AvailableCreeps[0]);
             }
 
 

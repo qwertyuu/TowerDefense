@@ -60,7 +60,10 @@ namespace TD
                     if (mouse.LeftClickState == ClickState.Clicked)
                     {
                         item.Clicked();
-                        return lesMenus.Find(bk => bk.gameState == item.returnState);
+                        if (item.returnState != GameState.None)
+                        {
+                            return lesMenus.Find(bk => bk.gameState == item.returnState);
+                        }
                     }
                 }
                 else

@@ -91,6 +91,7 @@ namespace TD
         MouseHandler mouse;
         KeyboardHandler keyboard;
         InGameUI gameUi;
+        IMenu options;
         IMenu currentMenu;
         public static Texture2D towerRange;
         Camera cam;
@@ -166,6 +167,7 @@ namespace TD
             clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0], 100, false);
 
             currentMenu = new Menus.MainMenu();
+            options = new Menus.Options(graphics);
             gameUi = new InGameUI(uiTextures, ref cellsWithTower);
             ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,currentMap);
 
@@ -211,7 +213,7 @@ namespace TD
                             clippedToMouse = null;
                         }
                     }
-                    gameUi.Update(mouse);
+                    gameUi.Update(mouse, keyboard);
 
                     if (keyboard.pressedKeysList.Contains(Keys.Escape))
                         currentMenu = ingamemenu;

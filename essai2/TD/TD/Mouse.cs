@@ -16,10 +16,10 @@ namespace TD
             get
             {
                 var toReturn = _left;
-                if (_left == ClickState.Clicked)
-                {
-                    _left = ClickState.Held;
-                }
+                //if (_left == ClickState.Clicked)
+                //{
+                //    _left = ClickState.Held;
+                //}
                 return toReturn;
             }
             set
@@ -32,10 +32,10 @@ namespace TD
             get
             {
                 var toReturn = _right;
-                if (_right == ClickState.Clicked)
-                {
-                    _right = ClickState.Held;
-                }
+                //if (_right == ClickState.Clicked)
+                //{
+                //    _right = ClickState.Held;
+                //}
                 return toReturn;
             }
             set
