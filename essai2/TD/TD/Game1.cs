@@ -107,7 +107,9 @@ namespace TD
         public Texture2D[] mainMenuButtons;
         public static Texture2D cellT;
         IMenu ingamemenu;
+        IMenu gameOverMenu;
         public static bool _Exit;
+        public static uint playerLife = 10;
 
         public Game1()
         {
@@ -169,6 +171,7 @@ namespace TD
             options = new Menus.Options(graphics);
             gameUi = new InGameUI(uiTextures, ref cellsWithTower);
             ingamemenu = new Menus.InGameMenu(ref cam, ref cellsWithTower, currentMap);
+            gameOverMenu = new Menus.GameOverMenu(ref cam, ref cellsWithTower, currentMap);
 
             creepText = Content.Load<Texture2D>("Creep");
             wave = new CreepWave(30);
@@ -223,6 +226,8 @@ namespace TD
                     }
 
                     cam.Update(mouse, gameTime, gameUi);
+                    if (playerLife == 0)
+                        currentMenu = gameOverMenu;
                 }
 
                 else

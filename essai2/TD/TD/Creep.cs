@@ -34,7 +34,7 @@ namespace TD
         {
             life = 100;
             index = 0;
-            speed = 60;
+            speed = 500;
             destination = new Vector2(Map.waypoints[index].spacePos.X, Map.waypoints[index].spacePos.Y);
             vectorPos = new Vector2(Map.initialPathLocation.X, Map.initialPathLocation.Y);
             boundingBox = new Rectangle(Map.initialPathLocation.X, Map.initialPathLocation.Y, Cell.size, Cell.size);
@@ -65,7 +65,7 @@ namespace TD
                 else
                 {
                     life = 0;
-                    //enlever une vie au joueur
+                    Game1.playerLife--;
                 }
             }
         }

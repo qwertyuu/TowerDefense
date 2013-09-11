@@ -77,6 +77,7 @@
     <Compile Include="InGameUI.cs" />
     <Compile Include="KeyboardHandler.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="Menus\GameOverMenu.cs" />
     <Compile Include="Menus\InGameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Options.cs" />
