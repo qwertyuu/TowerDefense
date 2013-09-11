@@ -137,7 +137,6 @@ namespace TD
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            //currentLevel = 5;
             cellsWithTower = new List<Cell>();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuButtons = new Texture2D[3];
@@ -169,7 +168,7 @@ namespace TD
             currentMenu = new Menus.MainMenu();
             options = new Menus.Options(graphics);
             gameUi = new InGameUI(uiTextures, ref cellsWithTower);
-            ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,currentMap);
+            ingamemenu = new Menus.InGameMenu(ref cam, ref cellsWithTower, currentMap);
 
             creepText = Content.Load<Texture2D>("Creep");
             wave = new CreepWave(30);

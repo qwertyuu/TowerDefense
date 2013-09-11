@@ -73,18 +73,21 @@ namespace TD
         void upgrade_Clic(object sender, EventArgs e)
         {
             if (Game1.SelectedObject.GetType() == typeof(Tower))
-            {
                 ((Tower)Game1.SelectedObject).levelUp();
-            }
         }
 
         public void Draw(SpriteBatch sprite)
         {
             sprite.Draw(textures[0], textBounds[0], Color.White * transparencyLvl);
             sprite.DrawString(Game1.font, sB, infoPos, Color.White);
+
             foreach (var item in buttonList)
             {
-                item.Draw(sprite);
+                if (item.function == UIButtonFunction.Upgrade && (((Tower)Game1.SelectedObject).level >= Tower.maxLevel))
+                    continue;
+
+                else
+                    item.Draw(sprite);
             }
         }
 

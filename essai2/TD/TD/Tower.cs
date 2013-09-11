@@ -62,6 +62,7 @@ namespace TD
         private DateTime Cooldown;
         public List<Projectile> projectiles { get; set; }
         public int speed { get; set; }
+        static public int maxLevel { get { return 3; }}
 
         public Tower(Point pos, Types _type, Texture2D texture, int range, bool _show)
         {
@@ -145,17 +146,20 @@ namespace TD
 
         public void levelUp()
         {
-            level++;
-            if (damage > int.MaxValue / 2)
+            if (level < maxLevel)
             {
-                damage = int.MaxValue;
+                level++;
+                if (damage > int.MaxValue / 2)
+                {
+                    damage = int.MaxValue;
+                }
+                else
+                {
+                    damage *= 2;
+                }
+                speed /= 2;
+                Range += 30;
             }
-            else
-            {
-                damage *= 2;
-            }
-            speed /= 2;
-            Range += 30;
         }
 
         public static double DetectCreep(Creep creep, Tower tower)

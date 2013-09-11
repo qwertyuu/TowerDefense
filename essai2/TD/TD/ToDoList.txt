@@ -9,3 +9,5 @@ ajouter un systeme de grille pour mettre les tours - Fait!
 faire un AI pour les tours et les creeps -> Fait
 faire un systeme de waypoint pour les creep pour qu'ils trouvent leur chemin -> Fait
 Créer une classe Circle -> Fait
+Cleaner les creeps sur la map lors de recréation de la map
+Afficher le menu options dans InGameMenu
