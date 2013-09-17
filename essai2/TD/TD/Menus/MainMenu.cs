@@ -37,15 +37,15 @@ namespace TD.Menus
             quit.Clic += quit_Clic;
             AddButton(quit);
         }
+
+        private void quit_Clic(object sender, IMenu swag)
+        {
+            Game1._Exit = true;
+        }
         public override void EscapePressed()
         {
             Game1._Exit = true;
             base.EscapePressed();
-        }
-
-        void quit_Clic(object sender, EventArgs e)
-        {
-            Game1._Exit = true;
         }
 
     }

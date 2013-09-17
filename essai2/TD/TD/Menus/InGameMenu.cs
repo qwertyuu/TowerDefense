@@ -53,9 +53,10 @@ namespace TD.Menus
             AddButton(menu);
         }
 
-        void menu_Clic(object sender, EventArgs e)
+        private void menu_Clic(object sender, IMenu swag)
         {
             Map.map = Map.Parse(Game1.currentMap);
+            Game1.gold = 150;
             cam.position = Vector2.Zero;
             cellWithTowers.Clear();
             CreepWave.inGameCreeps.Clear();

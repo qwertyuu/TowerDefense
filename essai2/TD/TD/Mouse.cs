@@ -7,6 +7,9 @@ using System.Text;
 
 namespace TD
 {
+    //Represents every state the mouse can be in
+    enum ClickState { Clicked, Held, Releasing, Released }
+
     class MouseHandler
     {
         //si le leftclickstate est get pendant que c'est cliqué, changer en held

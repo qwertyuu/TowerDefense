@@ -72,8 +72,11 @@ namespace TD
 
         void upgrade_Clic(object sender, EventArgs e)
         {
-            if (Game1.SelectedObject.GetType() == typeof(Tower))
+            if (Game1.SelectedObject.GetType() == typeof(Tower) && Game1.gold >= ((Tower)Game1.SelectedObject).UpgradeCostByType(((Tower)Game1.SelectedObject).towertype))
+            {
                 ((Tower)Game1.SelectedObject).levelUp();
+                Game1.gold -= (int)(((Tower)Game1.SelectedObject).UpgradeCostByType(((Tower)Game1.SelectedObject).towertype));
+            }
         }
 
         public void Draw(SpriteBatch sprite)
@@ -103,6 +106,8 @@ namespace TD
                     break;
                 }
             }
+
+            Game1.gold += 50 * sellBuffer.contains.level;
 
             if(Game1.SelectedObject.GetType() == typeof(Tower))
                 Game1.SelectedObject = null;

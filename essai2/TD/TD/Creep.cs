@@ -19,7 +19,7 @@ namespace TD
 
         public Rectangle boundingBox { get; set; }
         public Dictionary<Tower, double> distances = new Dictionary<Tower, double>();
-        private int index;
+        private int index = 0;
         public Vector2 vectorPos { get; set; }
         public Vector2 direction { get; set; }
         public Vector2 destination { get; set; }
@@ -34,7 +34,7 @@ namespace TD
         {
             life = 100;
             index = 0;
-            speed = 500;
+            speed = 60;
             destination = new Vector2(Map.waypoints[index].spacePos.X, Map.waypoints[index].spacePos.Y);
             vectorPos = new Vector2(Map.initialPathLocation.X, Map.initialPathLocation.Y);
             boundingBox = new Rectangle(Map.initialPathLocation.X, Map.initialPathLocation.Y, Cell.size, Cell.size);
@@ -79,7 +79,10 @@ namespace TD
         {
             life -= attackingTower.damage;
             if (life < 0)
+            {
                 life = 0;
+                Game1.gold += 20;
+            }
         }
 
         public bool show { get; set; }

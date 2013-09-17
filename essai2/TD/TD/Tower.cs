@@ -20,8 +20,9 @@ namespace TD
         public List<Creep> AvailableCreeps = new List<Creep>();
         public bool inCooldown { get; set; }
         private int _Range;
+
         public int Range
-        {
+        {        
             get
             {
                 return _Range;
@@ -53,7 +54,7 @@ namespace TD
                 rangePos = SetRangePos();
             }
         }
-        public Types type;
+        public Types towertype;
         public List<UIButtonFunction> neededFunctions { get; set; }
         public Vector2 gridPosition;
         public int level;
@@ -69,9 +70,10 @@ namespace TD
             inCooldown = false;
             projectiles = new List<Projectile>();
             level = 1;
-            damage = 1;
+
+            damage = 5;
             speed = 500;
-            type = _type;
+            towertype = _type;
             text = texture;
             show = _show;
             boundingBox = new Rectangle(pos.X, pos.Y, Cell.size, Cell.size);
@@ -184,6 +186,30 @@ namespace TD
             }
 
             return smallest;
+        }
+        
+        public static uint getAddCostByType(Types type)
+        {
+                switch (type)
+	                {
+                    case Types.type1 :
+                        return 50;
+
+		            default:
+                        return 0;
+	                }
+        }
+
+        internal uint UpgradeCostByType(Types type)
+        {
+            switch (type)
+            {
+                case Types.type1:
+                    return 150;
+
+                default:
+                    return 0;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿#region Using Statements
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace TD.Menus
             AddButton(menu);
         }
 
-        void menu_Clic(object sender, EventArgs e)
+        private void menu_Clic(object sender, IMenu swag)
         {
             Map.map = Map.Parse(Game1.currentMap);
             cam.position = Vector2.Zero;
@@ -44,6 +44,5 @@ namespace TD.Menus
             CreepWave.inGameCreeps.Clear();
             Game1.inGameState = InGameState.Play;
         }
-
     }
 }

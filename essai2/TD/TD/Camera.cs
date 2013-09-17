@@ -14,7 +14,7 @@ namespace TD
         public int mapWidth;
         public int mapHeight;
         const int treshold = 3;
-        int speed = 1000;
+        public static int speed = 1000;
         int maxX = GraphicsDeviceManager.DefaultBackBufferWidth - treshold;
         int minX = treshold;
         int maxY = GraphicsDeviceManager.DefaultBackBufferHeight - treshold;
