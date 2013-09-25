@@ -19,10 +19,12 @@ namespace MapMaker
         public Rectangle position;
         public static int grosseur = 15;
         public Color couleur;
+        public int chiffre;
         public Kind kind { get; set; }
         public Cell(int x, int y)
         {
             couleur = Color.Green;
+            chiffre = 2;
             kind = Kind.Turret;
             position = new Rectangle(x * grosseur, y * grosseur, grosseur, grosseur);
         }
@@ -48,12 +50,15 @@ namespace MapMaker
                 {
                     case Kind.Rock:
                         couleur = Color.Red;
+                        chiffre = 0;
                         break;
                     case Kind.Turret:
                         couleur = Color.Green;
+                        chiffre = 2;
                         break;
                     case Kind.Creep:
                         couleur = Color.White;
+                        chiffre = 1;
                         break;
                     default:
                         break;

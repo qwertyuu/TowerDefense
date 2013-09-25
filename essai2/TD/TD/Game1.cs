@@ -14,19 +14,13 @@ using System.Xml.Serialization;
 //////////////////////////
 //LEARN TO CODE GOD DAMMIT
 //ou pas
-// IMenu menu;
-// menu = new MainMenu();
-//
-// [Code]
-//
-// menu = new InGameMenu();
 //////////////////////////
 
 
 namespace TD
 {
+    //Represents every state the game can be in
     enum GameState { MainMenu, Options, InGame, PlayMenu, LoadingMenu, InGameMenu, SaveMenu, EndGameMenu, None}
-    enum ClickState { Clicked, Held, Releasing, Released }
     public enum InGameState { Play, Add, Upgrade }
     public enum UIButtonFunction { Add, Upgrade, Sell }
 
@@ -35,27 +29,82 @@ namespace TD
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        //Hold the current state
         static public InGameState inGameState;
 
         public static GraphicsDeviceManager graphics;
+
+        //Hold and verify the current selected object between creeps and turrets
+        private static object _selectedObject;
+        public static object SelectedObject
+        {
+            get
+            {
+                return _selectedObject;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (_selectedObject != null)
+                    {
+                        if (_selectedObject.GetType() == typeof(Tower))
+                            ((Tower)_selectedObject).show = false;
+                        else
+                            ((Creep)_selectedObject).show = false;
+                    }
+                    _selectedObject = value;
+                }
+                else
+                {
+                    if (value != _selectedObject)
+                    {
+                        if (value.GetType() == typeof(Tower))
+                            ((Tower)value).show = true;
+                        else
+                            ((Creep)value).show = true;
+                        if (_selectedObject != null)
+                        {
+                            if (_selectedObject.GetType() == typeof(Tower))
+                                ((Tower)_selectedObject).show = false;
+                            else
+                                ((Creep)_selectedObject).show = false;
+                        }
+                    }
+                    _selectedObject = value;
+                }
+                InGameUI.SetButtons();
+            }
+        }
+
+
         SpriteBatch spriteBatch;
-        public static SpriteFont font;
+        CreepWave wave;
         MouseHandler mouse;
         KeyboardHandler keyboard;
         InGameUI gameUi;
+        IMenu options;
         IMenu currentMenu;
+        IMenu ingamemenu;
+        IMenu gameOverMenu;
         Camera cam;
         Tower clippedToMouse;
         Texture2D[] towersText;
         Texture2D[] uiTextures;
-        List<Cell> cellsWithTower;
-        List<Cell> cellsWithCreeps;
         SpriteFont debugFont;
         public Texture2D[] mainMenuButtons;
-        public static Texture2D cellT;
-        IMenu ingamemenu;
+
+        //Static members
+        static List<Cell> cellsWithTower;
         public static bool _Exit;
-        int currentLevel;
+        public static uint playerLife = 10;
+        public static int gold = 150;
+        public static SpriteFont font;
+        public static Texture2D missileText;
+        public static Texture2D cellT;
+        public static Texture2D creepText;
+        public static string currentMap = "11.txt";
+        public static Texture2D towerRange;
 
         public Game1()
         {
@@ -85,35 +134,47 @@ namespace TD
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            currentLevel = 1;
+            Map.map = Map.Parse(currentMap);
             cellsWithTower = new List<Cell>();
-            cellsWithCreeps = new List<Creep>();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuButtons = new Texture2D[3];
-            Map.map = Map.Parse("1.txt");
-            debugFont = Content.Load<SpriteFont>("SpriteFont1");
+            towersText = new Texture2D[10];
+            uiTextures = new Texture2D[10];
+
             cam = new Camera();
+            cam.position = new Vector2(0, Map.initialPathLocation.Y - GraphicsDeviceManager.DefaultBackBufferHeight / 2);
+
+            debugFont = Content.Load<SpriteFont>("SpriteFont1");
+            font = Content.Load<SpriteFont>("SpriteFont1");
+
+            creepText = Content.Load<Texture2D>("Creep");
+
+            wave = new CreepWave(30);
+
+            towerRange = Content.Load<Texture2D>("range");
+
+            missileText = Content.Load<Texture2D>("Missile");
+
             mainMenuButtons[0] = Content.Load<Texture2D>("PlayButton");
             mainMenuButtons[1] = Content.Load<Texture2D>("OptsButton");
 
             cellT = Content.Load<Texture2D>("Cell");
 
-            font = Content.Load<SpriteFont>("SpriteFont1");
-
-            towersText = new Texture2D[10];
             towersText[0] = Content.Load<Texture2D>("Tower");
 
-            uiTextures = new Texture2D[10];
             uiTextures[0] = Content.Load<Texture2D>("UIParts/UI_Bottom");
             uiTextures[1] = Content.Load<Texture2D>("Icons/deleteIcon");
             uiTextures[2] = Content.Load<Texture2D>("Icons/addIcon");
             uiTextures[3] = Content.Load<Texture2D>("Icons/upgradeIcon");
 
+            currentMenu = new Menus.MainMenu();
+            options = new Menus.Options(graphics);
+            gameUi = new InGameUI(uiTextures, ref cellsWithTower);
+            ingamemenu = new Menus.InGameMenu(ref cam, ref cellsWithTower, currentMap);
+            gameOverMenu = new Menus.GameOverMenu(ref cam, ref cellsWithTower, currentMap);
+
             clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0], 100, false);
 
-            currentMenu = new Menus.MainMenu();
-            gameUi = new InGameUI(uiTextures, ref cellsWithTower);
-            ingamemenu = new Menus.InGameMenu(ref cam,ref cellsWithTower,"1.txt");
         }
 
         /// <summary>
@@ -132,13 +193,15 @@ namespace TD
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            //Check if the window is active
             if (IsActive)
             {
                 keyboard.Update();
                 mouse.Update(cam, currentMenu);
-                if(currentMenu == null)
-                {
 
+                //If the current menu = null  we are in game
+                if (currentMenu == null)
+                {
                     if (!gameUi.textBounds[0].Contains(mouse.position))
                     {
                         if (mouse.LeftClickState == ClickState.Clicked)
@@ -154,16 +217,36 @@ namespace TD
                         {
                             clippedToMouse = null;
                         }
-                        inGameState = gameUi.Update(inGameState, mouse);
                     }
 
+                    gameUi.Update(mouse, keyboard);
+
                     if (keyboard.pressedKeysList.Contains(Keys.Escape))
-                        currentMenu = ingamemenu;                    
-                    cam.Update(mouse, gameTime);
+                        currentMenu = ingamemenu;
+                    wave.Update(gameTime, cellsWithTower);
+                    for (int i = 0; i < cellsWithTower.Count; i++)
+                    {
+                        cellsWithTower[i].contains.Update(gameTime);
+                    }
+
+                    cam.Update(mouse, gameTime, gameUi);
+                    if (playerLife == 0)
+                        currentMenu = gameOverMenu;
                 }
 
                 else
-                    currentMenu = IMenu.UpdateMenu(mouse, currentMenu, keyboard);
+                {
+                    var oldMenuState = currentMenu.gameState;
+                    var newMenu = IMenu.UpdateMenu(mouse, currentMenu, keyboard);
+                    if (newMenu != currentMenu)
+                    {
+                        currentMenu = newMenu;
+                        if (currentMenu != null)
+                        {
+                            currentMenu.senderMenuState = oldMenuState;
+                        }
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -194,25 +277,38 @@ namespace TD
                 case InGameState.Play:
                     var pos = mouse.fakePos;
                     bool hasSelected = false;
+
                     foreach (var item in cellsWithTower)
                     {
-                        if (item.contains.BoundingBox.Contains(pos))
+                        if (item.contains.boundingBox.Contains(pos))
                         {
-                            Tower.currentTower = item.contains;
+                            Game1.SelectedObject = item.contains;
                             hasSelected = true;
                             break;
                         }
                     }
                     if (!hasSelected)
                     {
-                        Tower.currentTower = null;
+                        foreach (var item in CreepWave.inGameCreeps)
+                        {
+                            if (item.boundingBox.Contains(pos))
+                            {
+                                Game1.SelectedObject = item;
+                                hasSelected = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!hasSelected)
+                    {
+                        Game1.SelectedObject = null;
                     }
                     break;
+
                 case InGameState.Add:
                     if (ClipTowersToCell(true))
-                    {
-                        inGameState = InGameState.Play;
-                    }
+                            inGameState = InGameState.Play;
                     break;
                 default:
                     break;
@@ -264,17 +360,20 @@ namespace TD
                     }
                     spriteBatch.Draw(cellT, item.spacePos, a);
                 }
+
                 foreach (var item in cellsWithTower)
-                {
                     item.contains.Draw(spriteBatch, 1.0f);
-                }
+
                 foreach (var item in cellsWithTower)
                 {
                     if (item.contains.show)
                     {
                         item.contains.DrawRange(spriteBatch);
+                        break;
                     }
                 }
+
+                wave.Draw(spriteBatch);
 
                 if (clippedToMouse != null)
                 {
@@ -304,12 +403,13 @@ namespace TD
             var pos = mouse.fakePos;
             foreach (var item in Map.map)
             {
-                if (item.spacePos.Contains(pos))
+                if (item.spacePos.Contains(pos) && gold >= Tower.getAddCostByType(Tower.Types.type1))
                 {
-                    if (item.type == Cell.CellTypes.Turret)
+                    if (item.type == Cell.CellTypes.Turret && item.contains == null)
                     {
-                        if (click && item.contains == null)
+                        if (click && item.contains == null && gold >= Tower.getAddCostByType(Tower.Types.type1))
                         {
+                            gold -= (int)(Tower.getAddCostByType(Tower.Types.type1));
                             Tower buf = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, false);
                             item.contains = buf;
                             cellsWithTower.Add(item);
@@ -320,10 +420,11 @@ namespace TD
                         }
                         else if (clippedToMouse.boundingBox != item.spacePos)
                         {
-                            clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
+                            clippedToMouse.boundingBox = item.spacePos;
                         }
                         return true;
                     }
+
                     else
                     {
                         clippedToMouse = null;

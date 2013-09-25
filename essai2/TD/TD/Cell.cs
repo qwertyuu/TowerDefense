@@ -13,7 +13,7 @@ namespace TD
         public enum CellTypes {Rock, Path, Turret};
         public Tower contains { get; set; }
         public Creep creepContains { get; set; }
-        public static int size = 15;
+        public static int size = 20;
         public Rectangle spacePos;
         public CellTypes type;
 

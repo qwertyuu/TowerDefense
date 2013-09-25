@@ -18,6 +18,7 @@ namespace TD
 
         protected List<Buttons> buttonsList;
         public GameState gameState { get; set; }
+        public GameState senderMenuState;
         public GameState Escape = GameState.None;
         public Vector2 centerPoint = new Vector2(GraphicsDeviceManager.DefaultBackBufferWidth / 2, GraphicsDeviceManager.DefaultBackBufferHeight / 2);
         public static List<IMenu> lesMenus = new List<IMenu>();
@@ -47,6 +48,7 @@ namespace TD
         public static IMenu UpdateMenu(MouseHandler mouse, IMenu current, KeyboardHandler kB)
         {
             List<Buttons> currentMenuList = lesMenus[lesMenus.IndexOf(current)].buttonsList;
+
             if (kB.pressedKeysList.Contains(Keys.Escape))
             {
                 current.EscapePressed();
@@ -54,17 +56,10 @@ namespace TD
             }
             foreach (var item in currentMenuList)
             {
-                if (item.spacePos.Contains(mouse.position))
+                if (item.Update(mouse, current) == true)
                 {
-                    item.Transparency = 0.5f;
-                    if (mouse.LeftClickState == ClickState.Clicked)
-                    {
-                        item.Clicked();
-                        return lesMenus.Find(bk => bk.gameState == item.returnState);
-                    }
+                    return lesMenus.Find(bk => bk.gameState == item.returnState);
                 }
-                else
-                    item.Transparency = 1.0f;
             }
             return current;
         }

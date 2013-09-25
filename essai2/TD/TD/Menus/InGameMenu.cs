@@ -34,6 +34,14 @@ namespace TD.Menus
             returnToGame.returnState = GameState.InGame;
             AddButton(returnToGame);
 
+            Buttons options = new Buttons();
+            options.text = "Options";
+            options.font = Game1.font;
+            options.texture = Game1.cellT;
+            options.couleur = Color.Red;
+            options.returnState = GameState.Options;
+            AddButton(options);
+
             Buttons menu = new Buttons();
             menu.text = "Main Menu";
             menu.font = Game1.font;
@@ -45,11 +53,13 @@ namespace TD.Menus
             AddButton(menu);
         }
 
-        void menu_Clic(object sender, EventArgs e)
+        private void menu_Clic(object sender, IMenu swag)
         {
-            Map.map = Map.Parse("1.txt");
+            Map.map = Map.Parse(Game1.currentMap);
+            Game1.gold = 150;
             cam.position = Vector2.Zero;
             cellWithTowers.Clear();
+            CreepWave.inGameCreeps.Clear();
             Game1.inGameState = InGameState.Play;
         }
     }

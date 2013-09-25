@@ -1,4 +1,4 @@
-﻿#region Using Statements
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace TD
             for (int i = 0; i < textures.Length; i++)
             {
                 if (textures[i] != null)
-                    sprite.Draw(textures[i], textBounds[i], Color.White * 0.2f);
+                    sprite.Draw(textures[i], textBounds[i], Color.White * 0.5f);
             }
         
         }
