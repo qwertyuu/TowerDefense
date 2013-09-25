@@ -115,6 +115,13 @@ namespace TD
 
         void add_Clic(object sender, EventArgs e)
         {
+            /*
+            if (Game1.gold >= prix de la tour)
+            {
+                Game1.inGameState = InGameState.Add;
+                Game1.SelectedObject = null;
+            }
+            */
             Game1.inGameState = InGameState.Add;
             Game1.SelectedObject = null;
         }
