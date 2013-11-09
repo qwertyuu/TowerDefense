@@ -25,6 +25,8 @@ namespace TD.Menus
             cam = _cam;
             cellWithTowers = _cellWithTowers;
 
+            AddHeader("Game Over");
+
             Buttons menu = new Buttons();
             menu.text = "Main Menu";
             menu.font = Game1.font;
@@ -34,6 +36,7 @@ namespace TD.Menus
             menu.Clic += menu_Clic;
             menu.returnState = GameState.MainMenu;
             AddDrawable(menu);
+           
         }
 
         private void menu_Clic(object sender, IMenu swag)

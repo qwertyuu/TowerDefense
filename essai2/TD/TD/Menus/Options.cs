@@ -20,6 +20,9 @@ namespace TD.Menus
         public Options(GraphicsDeviceManager graphics)
         {
             this.graphics = graphics;
+
+            AddHeader("Options");
+
             gameState = GameState.Options;
             Buttons AntiAlias = new Buttons();
             AntiAlias.text = "Antialias: " + graphics.PreferMultiSampling;

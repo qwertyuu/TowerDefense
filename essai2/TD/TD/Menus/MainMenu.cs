@@ -17,6 +17,8 @@ namespace TD.Menus
     {
         public MainMenu()
         {
+            AddHeader("Main Menu");
+
             gameState = GameState.MainMenu;
             Buttons play = new Buttons();
             play.text = "Play";

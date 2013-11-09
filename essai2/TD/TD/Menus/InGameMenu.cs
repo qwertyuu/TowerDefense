@@ -26,6 +26,8 @@ namespace TD.Menus
             cam = _cam;
             cellWithTowers = _cellWithTowers;
 
+            AddHeader("Menu");
+
             Buttons returnToGame = new Buttons();
             returnToGame.text = "Go back to game";
             returnToGame.font = Game1.font;

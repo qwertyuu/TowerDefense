@@ -34,6 +34,18 @@ namespace TD
             lesMenus.Add(this);
         }
 
+        protected void AddHeader(string name)
+        {
+            Drawable menu = new Drawable();
+            menu.text = name;
+            menu.font = Game1.font;
+            menu.fontColor = Color.Black;
+            menu.texture = Game1.cellT;
+            menu.couleur = Color.White;
+            menu.returnState = GameState.None;
+            AddDrawable(menu);
+        }
+
         public void AddDrawable(Drawable drawable)
         {
             drawableList.Add(drawable);
