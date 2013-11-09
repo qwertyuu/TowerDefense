@@ -13,9 +13,10 @@ using Microsoft.Xna.Framework.Media;
 
 namespace TD
 {
-    class Slider : Buttons
+    class Slider : Drawable
     {
-        Buttons[] sliderPartsPos;
+        Drawable[] sliderPartsPos;
+
         public override Rectangle spacePos
         {
             get

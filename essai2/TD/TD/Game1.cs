@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.IO;
 using System.Xml.Serialization;
+using TD.Towers;
 
 //////////////////////////
 //LEARN TO CODE GOD DAMMIT
@@ -98,7 +99,7 @@ namespace TD
         static List<Cell> cellsWithTower;
         public static bool _Exit;
         public static uint playerLife = 10;
-        public static int gold = 150;
+        public static uint gold = 1000;
         public static SpriteFont font;
         public static Texture2D missileText;
         public static Texture2D cellT;
@@ -172,9 +173,6 @@ namespace TD
             gameUi = new InGameUI(uiTextures, ref cellsWithTower);
             ingamemenu = new Menus.InGameMenu(ref cam, ref cellsWithTower, currentMap);
             gameOverMenu = new Menus.GameOverMenu(ref cam, ref cellsWithTower, currentMap);
-
-            clippedToMouse = new Tower(Point.Zero, Tower.Types.type1, towersText[0], 100, false);
-
         }
 
         /// <summary>
@@ -403,31 +401,39 @@ namespace TD
             var pos = mouse.fakePos;
             foreach (var item in Map.map)
             {
-                if (item.spacePos.Contains(pos) && gold >= Tower.getAddCostByType(Tower.Types.type1))
+                if (_selectedObject != null)
                 {
-                    if (item.type == Cell.CellTypes.Turret && item.contains == null)
+                    if (_selectedObject.GetType().IsSubclassOf(typeof(Tower)))
                     {
-                        if (click && item.contains == null && gold >= Tower.getAddCostByType(Tower.Types.type1))
+                        if (item.spacePos.Contains(pos) && gold >= ((Tower)_selectedObject).cost)
                         {
-                            gold -= (int)(Tower.getAddCostByType(Tower.Types.type1));
-                            Tower buf = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, false);
-                            item.contains = buf;
-                            cellsWithTower.Add(item);
-                        }
-                        if (clippedToMouse == null)
-                        {
-                            clippedToMouse = new Tower(item.spacePos.Location, Tower.Types.type1, towersText[0], 100, true);
-                        }
-                        else if (clippedToMouse.boundingBox != item.spacePos)
-                        {
-                            clippedToMouse.boundingBox = item.spacePos;
-                        }
-                        return true;
-                    }
+                            if (item.type == Cell.CellTypes.Turret && item.contains == null)
+                            {
+                                if (click && item.contains == null && gold >= ((Tower)_selectedObject).cost)
+                                {
+                                    gold -= ((Tower)_selectedObject).cost;
+                                    Tower buf = ((Tower)_selectedObject);
+                                    buf.show = false;
+                                    item.contains = buf;
+                                    cellsWithTower.Add(item);
+                                }
+                                if (clippedToMouse == null)
+                                {
+                                    clippedToMouse = ((Tower)_selectedObject);
+                                    clippedToMouse.show = true;
+                                }
+                                else if (clippedToMouse.boundingBox != item.spacePos)
+                                {
+                                    clippedToMouse.boundingBox = item.spacePos;
+                                }
+                                return true;
+                            }
 
-                    else
-                    {
-                        clippedToMouse = null;
+                            else
+                            {
+                                clippedToMouse = null;
+                            }
+                        }
                     }
                 }
             }

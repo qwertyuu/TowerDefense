@@ -21,21 +21,31 @@ namespace TD.Menus
         {
             this.graphics = graphics;
             gameState = GameState.Options;
+
+            Drawable header = new Drawable();
+            header.text = "Options";
+            header.font = Game1.font;
+            header.fontColor = Color.Black;
+            header.texture = Game1.cellT;
+            header.couleur = Color.White;
+            header.returnState = GameState.None;
+            AddDrawable(header);
+
             Buttons AntiAlias = new Buttons();
             AntiAlias.text = "Antialias: " + graphics.PreferMultiSampling;
             AntiAlias.couleur = Color.Blue;
             AntiAlias.Clic += AntiAlias_Clic;
-            AddButton(AntiAlias);
+            AddDrawable(AntiAlias);
 
             Slider speed = new Slider();
-            AddButton(speed);
+            AddDrawable(speed);
 
             back = new Buttons();
             back.text = "Back";
             back.couleur = Color.Orange;
             back.returnState = GameState.MainMenu;
             back.Clic += back_Clic;
-            AddButton(back);
+            AddDrawable(back);
             this.Escape = back.returnState;
         }
 
@@ -54,7 +64,7 @@ namespace TD.Menus
 
         public override void EscapePressed()
         {
-            buttonsList[1].Clicked(this);
+            ((Buttons)drawableList[1]).Clicked(this);
             base.EscapePressed();
         }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using TD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -12,17 +13,18 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 #endregion
 
-namespace TD
+namespace TD.Towers
 {
-    public class Tower
+    abstract public class Tower
     {
-        public enum Types { type1, swag }
         public List<Creep> AvailableCreeps = new List<Creep>();
         public bool inCooldown { get; set; }
-        private int _Range;
+        protected int _Range;
+        public uint cost { get; protected set; }
+        public uint upgradeCost { get; protected set; }
 
         public int Range
-        {        
+        {
             get
             {
                 return _Range;
@@ -34,27 +36,28 @@ namespace TD
             }
         }
 
-        private Rectangle SetRangePos()
+        protected Rectangle SetRangePos()
         {
             return new Rectangle(boundingBox.Center.X - Range, boundingBox.Center.Y - Range, Range * 2, Range * 2);
         }
 
         public Rectangle rangePos { get; set; }
         public Texture2D text;
-        private Rectangle _boundingBox;
+        protected Rectangle _boundingBox;
         public Rectangle boundingBox
         {
             get
             {
                 return _boundingBox;
             }
+
             set
             {
                 _boundingBox = value;
                 rangePos = SetRangePos();
             }
         }
-        public Types towertype;
+
         public List<UIButtonFunction> neededFunctions { get; set; }
         public Vector2 gridPosition;
         public int level;
@@ -63,9 +66,9 @@ namespace TD
         private DateTime Cooldown;
         public List<Projectile> projectiles { get; set; }
         public int speed { get; set; }
-        static public int maxLevel { get { return 3; }}
+        static public int maxLevel { get { return 3; } }
 
-        public Tower(Point pos, Types _type, Texture2D texture, int range, bool _show)
+        public Tower(Point pos, Texture2D texture, int range, bool _show)
         {
             inCooldown = false;
             projectiles = new List<Projectile>();
@@ -73,18 +76,20 @@ namespace TD
 
             damage = 5;
             speed = 500;
-            towertype = _type;
             text = texture;
             show = _show;
             boundingBox = new Rectangle(pos.X, pos.Y, Cell.size, Cell.size);
             Range = range;
             neededFunctions = new List<UIButtonFunction>();
-            if (_type == Types.type1)
-            {
-                neededFunctions.Add(UIButtonFunction.Add);
-                neededFunctions.Add(UIButtonFunction.Sell);
-                neededFunctions.Add(UIButtonFunction.Upgrade);
-            }
+
+            AddNeededFunctions();
+        }
+
+        private void AddNeededFunctions()
+        {
+            neededFunctions.Add(UIButtonFunction.Add);
+            neededFunctions.Add(UIButtonFunction.Sell);
+            neededFunctions.Add(UIButtonFunction.Upgrade);
         }
 
         public void Draw(SpriteBatch sprite, float alpha)
@@ -97,21 +102,14 @@ namespace TD
             if (projectiles.Count > 0)
             {
                 foreach (var item in projectiles)
-                {
                     item.Draw(sprite);
-                }
             }
         }
 
         public void Update(GameTime gameTime)
         {
             if (AvailableCreeps.Count > 0)
-            {
-                //double minimum = AvailableCreeps.Min(bK => bK.distances[this]);
-                //var lol = AvailableCreeps.Find(bk => bk.distances[this] <= minimum);
                 Attack(AvailableCreeps[0]);
-            }
-
 
             if (projectiles.Count > 0)
             {
@@ -135,10 +133,9 @@ namespace TD
                 inCooldown = true;
                 Cooldown = DateTime.Now.AddMilliseconds(speed);
             }
-            else if(DateTime.Now >= Cooldown)
-            {
+
+            else if (DateTime.Now >= Cooldown)
                 inCooldown = false;
-            }
         }
 
         public void DrawRange(SpriteBatch sprite)
@@ -152,13 +149,11 @@ namespace TD
             {
                 level++;
                 if (damage > int.MaxValue / 2)
-                {
                     damage = int.MaxValue;
-                }
+
                 else
-                {
                     damage *= 2;
-                }
+
                 speed /= 2;
                 Range += 30;
             }
@@ -186,30 +181,6 @@ namespace TD
             }
 
             return smallest;
-        }
-        
-        public static uint getAddCostByType(Types type)
-        {
-                switch (type)
-	                {
-                    case Types.type1 :
-                        return 50;
-
-		            default:
-                        return 0;
-	                }
-        }
-
-        internal uint UpgradeCostByType(Types type)
-        {
-            switch (type)
-            {
-                case Types.type1:
-                    return 150;
-
-                default:
-                    return 0;
-            }
         }
     }
 }
