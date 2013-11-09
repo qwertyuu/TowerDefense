@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Serialization;
-using TD.Towers;
-
 
 namespace TD
 {

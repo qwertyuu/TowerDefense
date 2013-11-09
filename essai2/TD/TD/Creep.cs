@@ -9,8 +9,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using TD.Towers;
-
 #endregion
 
 namespace TD
@@ -27,7 +25,7 @@ namespace TD
         public Vector2 destination { get; set; }
         public int speed { get; set; }
         public bool IsDead { get { return life <= 0; } }
-        public int life;  
+        public int life;
         public Types type { get; set; }
         public Texture2D text;
         public Vector2 gridPos;
@@ -80,7 +78,7 @@ namespace TD
         public void getDamage(Tower attackingTower)
         {
             life -= attackingTower.damage;
-            if (life <= 0)
+            if (life < 0)
             {
                 life = 0;
                 Game1.gold += 20;

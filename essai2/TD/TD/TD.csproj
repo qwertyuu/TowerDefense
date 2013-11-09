@@ -73,7 +73,6 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Creep.cs" />
     <Compile Include="CreepWave.cs" />
-    <Compile Include="Drawable.cs" />
     <Compile Include="IMenu.cs" />
     <Compile Include="InGameUI.cs" />
     <Compile Include="KeyboardHandler.cs" />
@@ -88,8 +87,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Slider.cs" />
-    <Compile Include="Towers\Tower.cs" />
-    <Compile Include="Towers\Type1Tower.cs" />
+    <Compile Include="Tower.cs" />
     <Compile Include="UIButtons.cs">
       <SubType>Code</SubType>
     </Compile>

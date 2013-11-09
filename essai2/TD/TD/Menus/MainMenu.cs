@@ -18,35 +18,24 @@ namespace TD.Menus
         public MainMenu()
         {
             gameState = GameState.MainMenu;
-
-            Drawable header = new Drawable();
-            header.text = "Main Menu";
-            header.font = Game1.font;
-            header.fontColor = Color.Black;
-            header.texture = Game1.cellT;
-            header.couleur = Color.White;
-            header.returnState = GameState.None;
-            AddDrawable(header);
-
-
             Buttons play = new Buttons();
             play.text = "Play";
             play.couleur = Color.Blue;
             play.returnState = GameState.InGame;
-            AddDrawable(play);
+            AddButton(play);
 
             Buttons options = new Buttons();
             options.text = "Options";
             options.couleur = Color.White;
             options.fontColor = Color.Black;
             options.returnState = GameState.Options;
-            AddDrawable(options);
+            AddButton(options);
 
             Buttons quit = new Buttons();
             quit.text = "Quit";
             quit.couleur = Color.Orange;
             quit.Clic += quit_Clic;
-            AddDrawable(quit);
+            AddButton(quit);
         }
 
         private void quit_Clic(object sender, IMenu swag)
