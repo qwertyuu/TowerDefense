@@ -32,7 +32,7 @@ namespace TD.Menus
             returnToGame.texture = Game1.cellT;
             returnToGame.couleur = Color.RoyalBlue;
             returnToGame.returnState = GameState.InGame;
-            AddButton(returnToGame);
+            AddDrawable(returnToGame);
 
             Buttons options = new Buttons();
             options.text = "Options";
@@ -40,7 +40,7 @@ namespace TD.Menus
             options.texture = Game1.cellT;
             options.couleur = Color.Red;
             options.returnState = GameState.Options;
-            AddButton(options);
+            AddDrawable(options);
 
             Buttons menu = new Buttons();
             menu.text = "Main Menu";
@@ -50,7 +50,7 @@ namespace TD.Menus
             menu.couleur = Color.Yellow;
             menu.Clic += menu_Clic;
             menu.returnState = GameState.MainMenu;
-            AddButton(menu);
+            AddDrawable(menu);
         }
 
         private void menu_Clic(object sender, IMenu swag)

@@ -33,7 +33,7 @@ namespace TD.Menus
             menu.couleur = Color.Yellow;
             menu.Clic += menu_Clic;
             menu.returnState = GameState.MainMenu;
-            AddButton(menu);
+            AddDrawable(menu);
         }
 
         private void menu_Clic(object sender, IMenu swag)

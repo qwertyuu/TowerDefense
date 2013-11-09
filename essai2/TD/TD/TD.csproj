@@ -73,6 +73,7 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Creep.cs" />
     <Compile Include="CreepWave.cs" />
+    <Compile Include="Drawable.cs" />
     <Compile Include="IMenu.cs" />
     <Compile Include="InGameUI.cs" />
     <Compile Include="KeyboardHandler.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Menus\GameOverMenu.cs" />
     <Compile Include="Menus\InGameMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
+    <Compile Include="Menus\MapSelectionMenu.cs" />
     <Compile Include="Menus\Options.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Projectile.cs" />

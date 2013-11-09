@@ -90,7 +90,7 @@ namespace TD
             {
                 if (sliderPartsPos[i].spacePos.Contains(mouse.position))
                 {
-                    sliderPartsPos[i].Transparency = 0.5f;
+                    sliderPartsPos[i].transparency = 0.5f;
                     if (mouse.LeftClickState == ClickState.Clicked)
                     {
                         sliderPartsPos[i].Clicked(sender);
@@ -100,7 +100,7 @@ namespace TD
                 }
                 else
                 {
-                    sliderPartsPos[i].Transparency = 1.0f;
+                    sliderPartsPos[i].transparency = 1.0f;
                 }
             }
 

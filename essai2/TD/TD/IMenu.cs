@@ -16,7 +16,7 @@ namespace TD
     class IMenu
     {
 
-        protected List<Buttons> buttonsList;
+        protected List<Drawable> drawableList;
         public GameState gameState { get; set; }
         public GameState senderMenuState;
         public GameState Escape = GameState.None;
@@ -30,47 +30,44 @@ namespace TD
 
         public IMenu()
         {
-            buttonsList = new List<Buttons>();
+            drawableList = new List<Drawable>();
             lesMenus.Add(this);
         }
 
-        public void AddButton(Buttons _button)
+        public void AddDrawable(Drawable drawable)
         {
-            buttonsList.Add(_button);
-            for (int i = 0; i < buttonsList.Count; i++)
+            drawableList.Add(drawable);
+            for (int i = 0; i < drawableList.Count; i++)
             {
-                Rectangle place = new Rectangle((int)centerPoint.X, (int)centerPoint.Y + (int)((i + ((buttonsList.Count - 1) * -0.5)) * Buttons.variation), buttonsList[i].spacePos.Width, buttonsList[i].spacePos.Height);
-                buttonsList[i].spacePos = new Rectangle(place.X - place.Width / 2, place.Y - place.Height / 2, place.Width, place.Height);
-                buttonsList[i].textSpot = new Vector2(buttonsList[i].textOffset.X + buttonsList[i].spacePos.X, buttonsList[i].textOffset.Y + buttonsList[i].spacePos.Y);
+                Rectangle place = new Rectangle((int)centerPoint.X, (int)centerPoint.Y + (int)((i + ((drawableList.Count - 1) * -0.5)) * Buttons.variation), drawableList[i].spacePos.Width, drawableList[i].spacePos.Height);
+                drawableList[i].spacePos = new Rectangle(place.X - place.Width / 2, place.Y - place.Height / 2, place.Width, place.Height);
+                drawableList[i].textSpot = new Vector2(drawableList[i].textOffset.X + drawableList[i].spacePos.X, drawableList[i].textOffset.Y + drawableList[i].spacePos.Y);
             }
         }
 
         public static IMenu UpdateMenu(MouseHandler mouse, IMenu current, KeyboardHandler kB)
         {
-            List<Buttons> currentMenuList = lesMenus[lesMenus.IndexOf(current)].buttonsList;
+            List<Drawable> currentMenuList = lesMenus[lesMenus.IndexOf(current)].drawableList;
 
             if (kB.pressedKeysList.Contains(Keys.Escape))
             {
                 current.EscapePressed();
                 return lesMenus.Find(bk => bk.gameState == current.Escape);
             }
+
             foreach (var item in currentMenuList)
             {
-                if (item.Update(mouse, current) == true)
-                {
+                if (item.Update(mouse, current))
                     return lesMenus.Find(bk => bk.gameState == item.returnState);
-                }
             }
             return current;
         }
 
         public static void Draw(SpriteBatch spriteBatch, IMenu current)
         {
-            List<Buttons> currentMenuList = lesMenus.Find(bk => bk == current).buttonsList;
+            List<Drawable> currentMenuList = lesMenus.Find(bk => bk == current).drawableList;
             foreach (var item in currentMenuList)
-            {
                 item.Draw(spriteBatch);
-            }
         }
     }
 }

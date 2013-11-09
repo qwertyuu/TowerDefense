@@ -22,20 +22,20 @@ namespace TD.Menus
             play.text = "Play";
             play.couleur = Color.Blue;
             play.returnState = GameState.InGame;
-            AddButton(play);
+            AddDrawable(play);
 
             Buttons options = new Buttons();
             options.text = "Options";
             options.couleur = Color.White;
             options.fontColor = Color.Black;
             options.returnState = GameState.Options;
-            AddButton(options);
+            AddDrawable(options);
 
             Buttons quit = new Buttons();
             quit.text = "Quit";
             quit.couleur = Color.Orange;
             quit.Clic += quit_Clic;
-            AddButton(quit);
+            AddDrawable(quit);
         }
 
         private void quit_Clic(object sender, IMenu swag)
